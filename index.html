@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SEPA Instant Reachability · Cryptopocket</title>
+<meta name="description" content="Comprueba si el banco de un beneficiario acepta transferencias SEPA Instant. Datos oficiales del registro SCT Inst del European Payments Council, actualizados a diario.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Herramienta para clientes: banda navy de marca, columna de trabajo centrada, el BIC en mono como dato clave */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --line:#e1e4ea; --fg:#141b2b; --muted:#6b7487;
+  --brand:#0d1526; --brand-fg:#ffffff; --brand-muted:#8a9bb3; --gold:#c9a84c; --gold-soft:#fbf6e8; --gold-ink:#7a5a10;
+  --ok:#1a8a5c; --ok-soft:#ecf8f2; --warn:#b4630a; --warn-soft:#fff5e8; --bad:#c03030; --bad-soft:#fdf1f1;
+  --focus:#3b5bdb;
+  --sans:'IBM Plex Sans',-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0b1020; --surface:#131a2c; --line:#253049; --fg:#e7ebf3; --muted:#93a0b8;
+  --brand:#070b16; --gold:#d4b45c; --gold-soft:#2a2414; --gold-ink:#e6c873;
+  --ok:#3fc48b; --ok-soft:#10261d; --warn:#f0a447; --warn-soft:#2b1f0d; --bad:#f07070; --bad-soft:#2c1414;
+  --focus:#7b96ff; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--sans);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+[hidden]{display:none!important}
+
+.top{background:var(--brand);color:var(--brand-fg);padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:18px}
+.top h1{margin:0;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.top p{margin:2px 0 0;font-size:12.5px;color:var(--brand-muted)}
+.top-r{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border:1px solid #2a3756;border-radius:6px;overflow:hidden}
+.lang button{background:transparent;border:none;color:var(--brand-muted);padding:4px 9px;font-size:12px;font-weight:600;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#1e2a45;color:#fff}
+.badge{background:var(--gold);color:#141b2b;font-size:11px;font-weight:700;padding:5px 10px;border-radius:4px;letter-spacing:.08em;text-decoration:none}
+
+.stats{background:var(--surface);border-bottom:1px solid var(--line)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.stat{padding-block:14px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;vertical-align:1px}
+.dot.old{background:var(--warn)}
+@media (max-width:620px){.stats .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:nth-child(2){border-right:none}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+main.wrap{padding-block:22px 40px;display:flex;flex-direction:column;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.tabs{display:flex;gap:4px;border-bottom:1.5px solid var(--line);overflow-x:auto;overflow-y:hidden;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 16px;border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--gold)}
+
+label.lbl{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.row{display:flex;gap:8px}
+.row input{flex:1;min-width:0;padding:11px 14px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);font-family:var(--mono);font-size:15px}
+.row input::placeholder{font-family:var(--sans);color:var(--muted);font-size:14px}
+.btn{padding:9px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);white-space:nowrap}
+.btn:hover{border-color:var(--fg)}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+.result{border-radius:10px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+.result > div{min-width:0}
+.result.yes{background:var(--ok-soft);border:1.5px solid var(--ok)}
+.result.no{background:var(--warn-soft);border:1.5px solid var(--warn)}
+.result.bad{background:var(--bad-soft);border:1.5px solid var(--bad)}
+.result .ic{width:36px;height:36px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff}
+.result.yes .ic{background:var(--ok)} .result.no .ic{background:var(--warn)} .result.bad .ic{background:var(--bad)}
+.result h3{margin:0 0 4px;font-size:15px}
+.result p{margin:0 0 6px;font-size:13px}
+.result p:last-child{margin-bottom:0}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{padding:3px 10px;border-radius:20px;font-size:12px;border:1px solid var(--line);background:var(--surface)}
+.pill.bic{font-family:var(--mono);font-weight:600;background:var(--gold-soft);border-color:var(--gold);color:var(--gold-ink)}
+.linkbtn{background:none;border:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font-weight:600}
+
+.count{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 8px}
+.list{display:flex;flex-direction:column;gap:6px}
+.item{padding:10px 14px;border:1px solid var(--line);border-radius:8px;display:flex;justify-content:space-between;gap:12px;background:var(--surface);cursor:pointer;text-align:left;width:100%}
+.item:hover{border-color:var(--fg)}
+.item .l{min-width:0}
+.item .n{font-size:13px;font-weight:600;overflow-wrap:anywhere}
+.item .c{font-size:12px;color:var(--muted)}
+.item .r{text-align:right;flex:none}
+.bic{font-family:var(--mono);font-size:12px;font-weight:600}
+.since{font-size:11px;color:var(--ok);font-variant-numeric:tabular-nums}.since.soon{color:var(--warn)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:10px;align-items:start}
+.cc{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cc > button{width:100%;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border:none;background:transparent;cursor:pointer;font-weight:600;font-size:13px;text-align:left}
+.cc > button:hover{background:var(--bg)}
+.num{font-size:11px;font-weight:500;color:var(--muted);background:var(--bg);padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums}
+.cc ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);max-height:360px;overflow:auto}
+.cc li{padding:8px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.cc li:last-child{border-bottom:none}
+.cc li .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.feed{display:flex;flex-direction:column;gap:6px}
+.feed li{list-style:none;display:flex;gap:12px;align-items:baseline;padding:9px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:13px}
+.feed ul{margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.feed .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;flex:none;width:86px}
+.feed .t{min-width:0;flex:1;overflow-wrap:anywhere}
+.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;flex:none}
+.tag.add{background:var(--ok-soft);color:var(--ok)} .tag.del{background:var(--bad-soft);color:var(--bad)}
+h2.sec{font-size:13px;margin:6px 0 2px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+.state{padding:28px;text-align:center;color:var(--muted)}
+.foot{font-size:12px;color:var(--muted);display:grid;gap:4px;border-top:1px solid var(--line);padding-top:14px}
+.foot p{margin:0;max-width:80ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div><h1>SEPA Instant Reachability</h1><p data-i="subtitle">Comprueba si el banco del beneficiario acepta transferencias inmediatas</p></div>
+  <div class="top-r">
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" aria-pressed="true">ES</button><button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="badge" href="https://cryptopocket.io" target="_blank" rel="noopener">CRYPTOPOCKET</a>
+  </div>
+</div></header>
+
+<section class="stats" aria-label="Resumen"><div class="wrap">
+  <div class="stat"><b id="s-total">–</b><span data-i="st_total">Participantes</span></div>
+  <div class="stat"><b id="s-countries">–</b><span data-i="st_countries">Países</span></div>
+  <div class="stat"><b id="s-latest">–</b><span data-i="st_latest">Última adhesión</span></div>
+  <div class="stat"><b id="s-checked">–</b><span data-i="st_checked">Datos comprobados</span></div>
+</div></section>
+
+<main class="wrap">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="lookup" data-i="tab_lookup">Consultar</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="browse" data-i="tab_browse">Por país</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="news" data-i="tab_news">Novedades</button>
+  </div>
+
+  <section id="p-lookup">
+    <div class="panel">
+      <label class="lbl" for="q" data-i="q_label">BIC, IBAN o nombre del banco</label>
+      <div class="row">
+        <input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="UBSBCHZZXXX · ES91 2100 0418 4502 0005 1332 · Revolut">
+        <button class="btn" id="clear" type="button" data-i="clear">Limpiar</button>
+      </div>
+      <div class="hint" data-i="q_hint">Con el BIC (8 u 11 caracteres) el resultado es exacto.</div>
+    </div>
+    <div id="out" style="margin-top:14px"><div class="state" data-i="loading">Cargando el registro…</div></div>
+  </section>
+
+  <section id="p-browse" hidden>
+    <div class="panel" style="margin-bottom:12px">
+      <label class="lbl" for="cf" data-i="cf_label">Filtrar por país</label>
+      <div class="row"><input id="cf" type="text" autocomplete="off" placeholder="SPAIN, GERMANY, SWITZERLAND…"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="p-news" hidden>
+    <div id="news"></div>
+  </section>
+
+  <footer class="foot">
+    <p data-i="foot1">Fuente: registro oficial de participantes SCT Inst del European Payments Council (EPC). Se comprueba automáticamente cada día.</p>
+    <p data-i="foot2">Información orientativa. Que un banco no figure no significa que no pueda recibir pagos inmediatos: puede hacerlo a través de otra entidad. Confirma los casos críticos con tu proveedor de pagos.</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+'use strict';
+var T={
+ es:{subtitle:'Comprueba si el banco del beneficiario acepta transferencias inmediatas',st_total:'Participantes',st_countries:'Países',st_latest:'Última adhesión',st_checked:'Datos comprobados',
+  tab_lookup:'Consultar',tab_browse:'Por país',tab_news:'Novedades',q_label:'BIC, IBAN o nombre del banco',clear:'Limpiar',
+  q_hint:'Con el BIC (8 u 11 caracteres) el resultado es exacto.',loading:'Cargando el registro…',cf_label:'Filtrar por país',
+  foot1:'Fuente: registro oficial de participantes SCT Inst del European Payments Council (EPC). Se comprueba automáticamente cada día.',
+  foot2:'Información orientativa. Que un banco no figure no significa que no pueda recibir pagos inmediatos: puede hacerlo a través de otra entidad. Confirma los casos críticos con tu proveedor de pagos.',
+  yes_h:'Acepta SEPA Instant',yes_p:'Este banco está adherido al esquema SCT Inst. Los pagos en euros llegan en menos de 10 segundos, 24 horas al día, todos los días del año.',
+  parent:'El BIC exacto no figura, pero su oficina principal sí está adherida.',since:'Adherido desde',
+  no_h:'No figura como participante de SCT Inst',
+  no_ez:'Es un país de la zona euro: por regulación europea, los bancos deben aceptar transferencias inmediatas desde enero de 2025 (entidades de pago y de dinero electrónico, desde abril de 2027). Lo más probable es que reciba el pago por otra entidad; confírmalo antes de enviar.',
+  no_other:'Lo habitual es que el pago llegue por SEPA estándar, normalmente el siguiente día hábil.',
+  results:function(n,t){return n+(t>n?' de '+t:'')+' resultado'+(n===1?'':'s')},
+  iban_ok:'IBAN válido',iban_bad:'IBAN no válido',iban_bad_p:'Revisa los dígitos: el código de control no cuadra.',
+  iban_p:function(c,n){return 'Cuenta en '+c+'. El IBAN no indica el BIC: pídelo al beneficiario o búscalo por el nombre del banco. Hay '+n+' entidades adheridas en este país.'},
+  iban_nosepa:function(c){return 'Cuenta en '+c+', país sin participantes en SCT Inst.'},
+  see_country:'Ver entidades del país',iban_ez:'Zona euro: los bancos están obligados a aceptar transferencias inmediatas desde enero de 2025.',err:'No se ha podido cargar el registro. Recarga la página en unos minutos.',
+  news_added:'Adhesiones recientes',news_soon:'Próximas incorporaciones',soon_h:'Todavía no acepta SEPA Instant',soon_p:function(d){return 'Este banco ha anunciado su incorporación al esquema SCT Inst a partir del '+d+'. Hasta esa fecha, los pagos llegarán por SEPA estándar, normalmente el siguiente día hábil.'},from:'a partir del',news_changes:'Cambios detectados',added:'Alta',removed:'Baja',no_changes:'Aún no hay cambios registrados: el histórico empieza con la primera sincronización.',
+  ago:function(d){return d<=0?'Hoy':d===1?'Ayer':'Hace '+d+' días'},pending:'Pendiente',locale:'es-ES'},
+ en:{subtitle:'Check whether the beneficiary’s bank accepts instant credit transfers',st_total:'Participants',st_countries:'Countries',st_latest:'Latest joiner',st_checked:'Data checked',
+  tab_lookup:'Check',tab_browse:'By country',tab_news:'What’s new',q_label:'BIC, IBAN or bank name',clear:'Clear',
+  q_hint:'A BIC (8 or 11 characters) gives an exact result.',loading:'Loading the register…',cf_label:'Filter by country',
+  foot1:'Source: official SCT Inst register of participants of the European Payments Council (EPC). Checked automatically every day.',
+  foot2:'For guidance only. A bank missing from the list may still receive instant payments through another institution. Confirm critical cases with your payment provider.',
+  yes_h:'Accepts SEPA Instant',yes_p:'This bank participates in the SCT Inst scheme. Euro payments arrive in under 10 seconds, 24/7/365.',
+  parent:'The exact BIC is not listed, but its head office participates.',since:'Participant since',
+  no_h:'Not listed as an SCT Inst participant',
+  no_ez:'This is a euro-area country: under EU rules, banks must accept instant transfers since January 2025 (payment and e-money institutions from April 2027). The bank most likely receives through another institution; confirm before sending.',
+  no_other:'The payment will usually arrive via standard SEPA, typically the next business day.',
+  results:function(n,t){return n+(t>n?' of '+t:'')+' result'+(n===1?'':'s')},
+  iban_ok:'Valid IBAN',iban_bad:'Invalid IBAN',iban_bad_p:'Check the digits: the checksum does not match.',
+  iban_p:function(c,n){return 'Account in '+c+'. An IBAN does not include the BIC: ask the beneficiary for it or search by bank name. There are '+n+' participating institutions in this country.'},
+  iban_nosepa:function(c){return 'Account in '+c+', a country with no SCT Inst participants.'},
+  see_country:'See institutions in this country',iban_ez:'Euro area: banks have been required to accept instant transfers since January 2025.',err:'The register could not be loaded. Please reload in a few minutes.',
+  news_added:'Recent joiners',news_soon:'Upcoming joiners',soon_h:'Not accepting SEPA Instant yet',soon_p:function(d){return 'This bank has announced it will join the SCT Inst scheme from '+d+'. Until then, payments will arrive via standard SEPA, typically the next business day.'},from:'from',news_changes:'Detected changes',added:'Joined',removed:'Left',no_changes:'No changes recorded yet: history starts with the first sync.',
+  ago:function(d){return d<=0?'Today':d===1?'Yesterday':d+' days ago'},pending:'Pending',locale:'en-GB'}
+};
+var ISO={AD:'ANDORRA',AT:'AUSTRIA',BE:'BELGIUM',BG:'BULGARIA',CH:'SWITZERLAND',CY:'CYPRUS',CZ:'CZECH REPUBLIC',DE:'GERMANY',DK:'DENMARK',EE:'ESTONIA',ES:'SPAIN',FI:'FINLAND',FR:'FRANCE',GB:'UNITED KINGDOM',GI:'GIBRALTAR',GR:'GREECE',HR:'CROATIA',HU:'HUNGARY',IE:'IRELAND',IS:'ICELAND',IT:'ITALY',JE:'JERSEY',GG:'GUERNSEY',IM:'ISLE OF MAN',LI:'LIECHTENSTEIN',LT:'LITHUANIA',LU:'LUXEMBOURG',LV:'LATVIA',MC:'MONACO',MD:'MOLDOVA',ME:'MONTENEGRO',MK:'NORTH MACEDONIA',MT:'MALTA',NL:'NETHERLANDS',NO:'NORWAY',PL:'POLAND',PT:'PORTUGAL',RO:'ROMANIA',RS:'SERBIA',AL:'ALBANIA',SE:'SWEDEN',SI:'SLOVENIA',SK:'SLOVAKIA',SM:'SAN MARINO',VA:'VATICAN CITY STATE'};
+var EUROZONE=['AT','BE','BG','HR','CY','EE','FI','FR','DE','GR','IE','IT','LV','LT','LU','MT','NL','PT','SK','SI','ES'];
+
+var lang=(function(){try{var s=localStorage.getItem('lang');if(s)return s}catch(e){}return /^es\b/i.test(navigator.language||'')?'es':'en'})();
+var TODAY=new Date().toISOString().slice(0,10);function live(p){return !p.since||p.since<=TODAY}
+var DB=[],BYBIC=new Map(),BYCOUNTRY={},META={},STATUS=null,CHANGES=[];
+var $=function(id){return document.getElementById(id)};
+function t(k){return T[lang][k]}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmtN(n){return Number(n).toLocaleString(t('locale'),{useGrouping:true})}
+function fmtD(d){if(!d)return '–';var x=new Date(d.length===10?d+'T12:00:00Z':d);return isNaN(x)?d:x.toLocaleDateString(t('locale'),{day:'numeric',month:'short',year:'numeric'})}
+function cname(c){return c.charAt(0)+c.slice(1).toLowerCase()}
+
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i]').forEach(function(el){var v=t(el.dataset.i);if(typeof v==='string')el.textContent=v});
+  document.querySelectorAll('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===lang))});
+  if(DB.length){stats();search();if(!$('p-browse').hidden)renderCountries();renderNews()}
+}
+document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){lang=b.dataset.lang;try{localStorage.setItem('lang',lang)}catch(e){}applyLang()})});
+
+function stats(){
+  $('s-total').textContent=fmtN(DB.length);
+  $('s-countries').textContent=Object.keys(BYCOUNTRY).length;
+  $('s-latest').textContent=fmtD(DB.reduce(function(a,p){return live(p)&&p.since>a?p.since:a},''));
+  var c=(STATUS&&STATUS.checked)||META.updated;
+  if(c){var days=Math.floor((Date.now()-new Date(c).getTime())/864e5);
+    $('s-checked').innerHTML='<span class="dot'+(days>3?' old':'')+'"></span>'+esc(t('ago')(days));
+    $('s-checked').title=fmtD(c);
+  }else $('s-checked').textContent=t('pending');
+}
+
+/* ---------- consulta ---------- */
+var q=$('q'),out=$('out');
+function ibanValid(s){
+  if(!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/.test(s))return false;
+  var r=s.slice(4)+s.slice(0,4),num='';
+  for(var i=0;i<r.length;i++){var ch=r.charCodeAt(i);num+=ch>=65?(ch-55):r[i]}
+  var m=0;for(var j=0;j<num.length;j+=7)m=parseInt(String(m)+num.substr(j,7),10)%97;
+  return m===1;
+}
+function bicCard(p,viaParent){
+  if(!live(p))return '<div class="result no"><div class="ic">!</div><div><h3>'+esc(t('soon_h'))+'</h3><p>'+esc(t('soon_p')(fmtD(p.since)))+'</p>'+
+    '<div class="pills"><span class="pill bic">'+esc(p.bic)+'</span><span class="pill">'+esc(p.name)+'</span><span class="pill">'+esc(p.city)+', '+esc(cname(p.country))+'</span></div></div></div>';
+  return '<div class="result yes"><div class="ic">✓</div><div><h3>'+esc(t('yes_h'))+'</h3>'+
+    (viaParent?'<p>'+esc(t('parent'))+'</p>':'')+'<p>'+esc(t('yes_p'))+'</p>'+
+    '<div class="pills"><span class="pill bic">'+esc(p.bic)+'</span><span class="pill">'+esc(p.name)+'</span>'+
+    '<span class="pill">'+esc(p.city)+', '+esc(cname(p.country))+'</span><span class="pill">'+esc(t('since'))+' '+esc(fmtD(p.since))+'</span></div></div></div>';
+}
+function notFound(iso){
+  var ez=iso&&EUROZONE.indexOf(iso)>-1;
+  return '<div class="result no"><div class="ic">!</div><div><h3>'+esc(t('no_h'))+'</h3><p>'+esc(ez?t('no_ez'):t('no_other'))+'</p></div></div>';
+}
+function search(){
+  var raw=q.value.trim(), v=raw.toUpperCase().replace(/[\s-]/g,'');
+  if(v.length<2){out.innerHTML='';return}
+  // IBAN
+  if(/^[A-Z]{2}\d{2}/.test(v)&&v.length>=15){
+    var iso=v.slice(0,2),country=ISO[iso]||iso,n=(BYCOUNTRY[country]||[]).length;
+    if(!ibanValid(v)){out.innerHTML='<div class="result bad"><div class="ic">✕</div><div><h3>'+esc(t('iban_bad'))+'</h3><p>'+esc(t('iban_bad_p'))+'</p></div></div>';return}
+    var ez=EUROZONE.indexOf(iso)>-1;
+    out.innerHTML='<div class="result '+(n?'yes':'no')+'"><div class="ic">'+(n?'✓':'!')+'</div><div><h3>'+esc(t('iban_ok'))+' · '+esc(cname(country))+'</h3>'+
+      '<p>'+esc(n?t('iban_p')(cname(country),n):t('iban_nosepa')(cname(country)))+'</p>'+(ez?'<p>'+esc(t('iban_ez'))+'</p>':'')+
+      (n?'<p><button type="button" class="linkbtn" data-country="'+esc(country)+'">'+esc(t('see_country'))+' →</button></p>':'')+'</div></div>';
+    return;
+  }
+  // BIC exacto
+  if(/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(v)){
+    var hit=BYBIC.get(v)||(v.length===8&&BYBIC.get(v+'XXX'));
+    var via=false;
+    if(!hit&&v.length===11){hit=BYBIC.get(v.slice(0,8)+'XXX');via=!!hit}
+    if(hit){out.innerHTML=bicCard(hit,via);return}
+  }
+  var up=raw.toUpperCase(),res=[];
+  for(var i=0;i<DB.length;i++){var p=DB[i];if(p.bic.indexOf(v)===0||p.name.toUpperCase().indexOf(up)>-1)res.push(p)}
+  if(!res.length){
+    var iso2=/^[A-Z]{6}/.test(v)?v.slice(4,6):null;
+    out.innerHTML=notFound(iso2);return;
+  }
+  var shown=res.slice(0,30);
+  out.innerHTML='<div class="count">'+esc(t('results')(shown.length,res.length))+'</div><div class="list">'+shown.map(function(p){
+    return '<button type="button" class="item" data-bic="'+esc(p.bic)+'"><span class="l"><span class="n">'+esc(p.name)+'</span><br><span class="c">'+esc(p.city)+' · '+esc(cname(p.country))+'</span></span>'+
+      '<span class="r"><span class="bic">'+esc(p.bic)+'</span><br><span class="since'+(live(p)?'':' soon')+'">'+(live(p)?'':esc(t('from'))+' ')+esc(fmtD(p.since))+'</span></span></button>'}).join('')+'</div>';
+}
+q.addEventListener('input',search);
+out.addEventListener('click',function(e){
+  var b=e.target.closest('[data-bic]');if(b){q.value=b.dataset.bic;search();return}
+  var c=e.target.closest('[data-country]');if(c){$('cf').value=c.dataset.country;showTab('browse');var first=$('grid').querySelector('.cc > button');if(first)first.click()}
+});
+$('clear').addEventListener('click',function(){q.value='';out.innerHTML='';q.focus()});
+
+/* ---------- por país ---------- */
+var cf=$('cf'),grid=$('grid');
+function renderCountries(){
+  var f=cf.value.trim().toUpperCase();
+  grid.innerHTML=Object.keys(BYCOUNTRY).filter(function(c){return c.indexOf(f)>-1}).sort().map(function(c){
+    var banks=BYCOUNTRY[c];
+    return '<div class="cc"><button type="button" aria-expanded="false"><span>'+esc(cname(c))+'</span><span class="num">'+banks.length+'</span></button><ul hidden>'+
+      banks.map(function(b){return '<li><span class="nm" title="'+esc(b.name)+'">'+esc(b.name)+'<br><span class="bic">'+esc(b.bic)+'</span></span><span class="since'+(live(b)?'':' soon')+'">'+esc(b.since)+'</span></li>'}).join('')+'</ul></div>';
+  }).join('');
+}
+cf.addEventListener('input',renderCountries);
+grid.addEventListener('click',function(e){var b=e.target.closest('.cc > button');if(!b)return;var ul=b.nextElementSibling;ul.hidden=!ul.hidden;b.setAttribute('aria-expanded',String(!ul.hidden))});
+
+/* ---------- novedades ---------- */
+function renderNews(){
+  var recent=DB.filter(live).sort(function(a,b){return a.since<b.since?1:-1}).slice(0,25);
+  var soon=DB.filter(function(p){return !live(p)}).sort(function(a,b){return a.since<b.since?-1:1});
+  var html=soon.length?'<h2 class="sec">'+esc(t('news_soon'))+'</h2><ul class="feed">'+soon.map(function(p){return '<li><span class="d">'+esc(fmtD(p.since))+'</span><span class="t">'+esc(p.name)+' · <span class="bic">'+esc(p.bic)+'</span> · '+esc(cname(p.country))+'</span></li>'}).join('')+'</ul><div style="height:12px"></div>':'';
+  html+='<h2 class="sec">'+esc(t('news_changes'))+'</h2>';
+  var items=[];
+  CHANGES.slice(0,12).forEach(function(c){
+    c.added.forEach(function(p){items.push([c.date,'add',p])});
+    c.removed.forEach(function(p){items.push([c.date,'del',p])});
+  });
+  html+=items.length?'<ul class="feed">'+items.slice(0,60).map(function(x){
+    return '<li><span class="d">'+esc(fmtD(x[0]))+'</span><span class="tag '+x[1]+'">'+esc(t(x[1]==='add'?'added':'removed'))+'</span><span class="t">'+esc(x[2].name)+' · <span class="bic">'+esc(x[2].bic)+'</span> · '+esc(cname(x[2].country))+'</span></li>'}).join('')+'</ul>'
+    :'<p class="hint">'+esc(t('no_changes'))+'</p>';
+  html+='<h2 class="sec" style="margin-top:18px">'+esc(t('news_added'))+'</h2><ul class="feed">'+recent.map(function(p){
+    return '<li><span class="d">'+esc(fmtD(p.since))+'</span><span class="t">'+esc(p.name)+' · <span class="bic">'+esc(p.bic)+'</span> · '+esc(cname(p.country))+'</span></li>'}).join('')+'</ul>';
+  $('news').innerHTML=html;
+}
+
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(function(x){x.setAttribute('aria-selected',String(x.dataset.tab===name))});
+  ['lookup','browse','news'].forEach(function(n){$('p-'+n).hidden=n!==name});
+  if(name==='browse')renderCountries();
+  if(name==='news')renderNews();
+}
+document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.tab)})});
+
+/* ---------- carga ---------- */
+function getJSON(u){return fetch(u,{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+applyLang();
+Promise.all([
+  getJSON('participants.json'),
+  getJSON('changes.json').catch(function(){return []}),
+  getJSON('status.json').catch(function(){return null})
+]).then(function(r){
+  META=r[0];DB=META.rows;CHANGES=r[1]||[];STATUS=r[2];
+  DB.forEach(function(p){BYBIC.set(p.bic,p);(BYCOUNTRY[p.country]=BYCOUNTRY[p.country]||[]).push(p)});
+  Object.keys(BYCOUNTRY).forEach(function(c){BYCOUNTRY[c].sort(function(a,b){return a.name.localeCompare(b.name)})});
+  out.innerHTML='';stats();
+  var pre=new URLSearchParams(location.search).get('q');if(pre){q.value=pre;search()}
+}).catch(function(){out.innerHTML='<div class="result bad"><div class="ic">✕</div><div><h3>'+esc(t('err'))+'</h3></div></div>'});
+})();
+</script>
+</body>
+</html>
