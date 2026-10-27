@@ -18,7 +18,7 @@
   --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
   color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
+@media (prefers-color-scheme:dark){:root:not(.light){
   --bg:#0b1020; --surface:#131a2c; --line:#253049; --fg:#e7ebf3; --muted:#93a0b8;
   --brand:#070b16; --gold:#d4b45c; --gold-soft:#2a2414; --gold-ink:#e6c873;
   --ok:#3fc48b; --ok-soft:#10261d; --warn:#f0a447; --warn-soft:#2b1f0d; --bad:#f07070; --bad-soft:#2c1414;
@@ -114,6 +114,10 @@ h2.sec{font-size:13px;margin:6px 0 2px;color:var(--muted);text-transform:upperca
 .state{padding:28px;text-align:center;color:var(--muted)}
 .foot{font-size:12px;color:var(--muted);display:grid;gap:4px;border-top:1px solid var(--line);padding-top:14px}
 .foot p{margin:0;max-width:80ch}
+html.embed body{background:transparent}
+html.embed .top{display:none}
+html.embed main.wrap{padding-block:16px 8px}
+html.embed .stats{border:1px solid var(--line);border-radius:10px;margin:0 auto;max-width:1080px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -214,7 +218,10 @@ var T={
 var ISO={AD:'ANDORRA',AT:'AUSTRIA',BE:'BELGIUM',BG:'BULGARIA',CH:'SWITZERLAND',CY:'CYPRUS',CZ:'CZECH REPUBLIC',DE:'GERMANY',DK:'DENMARK',EE:'ESTONIA',ES:'SPAIN',FI:'FINLAND',FR:'FRANCE',GB:'UNITED KINGDOM',GI:'GIBRALTAR',GR:'GREECE',HR:'CROATIA',HU:'HUNGARY',IE:'IRELAND',IS:'ICELAND',IT:'ITALY',JE:'JERSEY',GG:'GUERNSEY',IM:'ISLE OF MAN',LI:'LIECHTENSTEIN',LT:'LITHUANIA',LU:'LUXEMBOURG',LV:'LATVIA',MC:'MONACO',MD:'MOLDOVA',ME:'MONTENEGRO',MK:'NORTH MACEDONIA',MT:'MALTA',NL:'NETHERLANDS',NO:'NORWAY',PL:'POLAND',PT:'PORTUGAL',RO:'ROMANIA',RS:'SERBIA',AL:'ALBANIA',SE:'SWEDEN',SI:'SLOVENIA',SK:'SLOVAKIA',SM:'SAN MARINO',VA:'VATICAN CITY STATE'};
 var EUROZONE=['AT','BE','BG','HR','CY','EE','FI','FR','DE','GR','IE','IT','LV','LT','LU','MT','NL','PT','SK','SI','ES'];
 
-var lang=(function(){try{var s=localStorage.getItem('lang');if(s)return s}catch(e){}return /^es\b/i.test(navigator.language||'')?'es':'en'})();
+var PARAMS=new URLSearchParams(location.search);
+var EMBED=PARAMS.get('embed')==='1';
+if(EMBED){document.documentElement.classList.add('embed');if(PARAMS.get('theme')!=='auto')document.documentElement.classList.add('light')}
+var lang=(function(){var pl=PARAMS.get('lang');if(pl==='es'||pl==='en')return pl;try{var s=localStorage.getItem('lang');if(s)return s}catch(e){}return /^es\b/i.test(navigator.language||'')?'es':'en'})();
 var TODAY=new Date().toISOString().slice(0,10);function live(p){return !p.since||p.since<=TODAY}
 var DB=[],BYBIC=new Map(),BYCOUNTRY={},META={},STATUS=null,CHANGES=[];
 var $=function(id){return document.getElementById(id)};
@@ -342,6 +349,14 @@ function showTab(name){
 }
 document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.tab)})});
 
+/* ---------- modo insertado: avisa de su altura a la web que lo contiene ---------- */
+if(EMBED&&window.parent!==window){
+  var lastH=0;
+  var sendH=function(){var h=Math.ceil(document.documentElement.scrollHeight);if(h!==lastH){lastH=h;window.parent.postMessage({type:'sepa-instant-height',height:h},'*')}};
+  if('ResizeObserver' in window)new ResizeObserver(sendH).observe(document.body);
+  window.addEventListener('load',sendH);setInterval(sendH,1000);
+}
+
 /* ---------- carga ---------- */
 function getJSON(u){return fetch(u,{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 applyLang();
@@ -354,7 +369,7 @@ Promise.all([
   DB.forEach(function(p){BYBIC.set(p.bic,p);(BYCOUNTRY[p.country]=BYCOUNTRY[p.country]||[]).push(p)});
   Object.keys(BYCOUNTRY).forEach(function(c){BYCOUNTRY[c].sort(function(a,b){return a.name.localeCompare(b.name)})});
   out.innerHTML='';stats();
-  var pre=new URLSearchParams(location.search).get('q');if(pre){q.value=pre;search()}
+  var pre=PARAMS.get('q');if(pre){q.value=pre;search()}
 }).catch(function(){out.innerHTML='<div class="result bad"><div class="ic">✕</div><div><h3>'+esc(t('err'))+'</h3></div></div>'});
 })();
 </script>
