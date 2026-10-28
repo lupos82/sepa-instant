@@ -1,0 +1,1070 @@
+{
+ "identified": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "ES",
+  "country_name": {
+   "en": "Spain",
+   "es": "España"
+  },
+  "iban_valid": true,
+  "iban_checksum_valid": true,
+  "iban_structure_valid": true,
+  "national_check": "VALID",
+  "national_bank_code": "9901",
+  "national_bank_code_type": {
+   "en": "Entity code (NRBE, Banco de España)",
+   "es": "Código de entidad (NRBE, Banco de España)"
+  },
+  "branch_code": "0001",
+  "bank_name": "ENTIDAD DE PRUEBA UNO, S.A.",
+  "bank_legal_name": "ENTIDAD DE PRUEBA UNO, S.A.",
+  "bank_city": null,
+  "lei": "TESTLEI0000000000001",
+  "bank_status": "ACTIVE",
+  "successor_code": null,
+  "bic_candidates": [
+   "TSTAESM1XXX"
+  ],
+  "bic_status": "CANDIDATES",
+  "bic_relation": "LEI_CHAIN",
+  "bank_identification_status": "IDENTIFIED",
+  "bank_source": {
+   "id": "bde_mfi_es",
+   "institution": "Banco de España",
+   "license": "ATTRIBUTION_REQUIRED",
+   "attribution": "Fuente: Elaboración propia a partir de datos de la web del Banco de España (www.bde.es).",
+   "url": "https://www.bde.es/webbe/es/estadisticas/otras-clasificaciones/clasificacion-entidades/listas-instituciones-financieras/listas-instituciones-financieras-monetarias-pais/lista-mfi-es.html",
+   "relation": "OFFICIAL_LIST"
+  },
+  "bank_source_date": "2026-10-28",
+  "warnings": [
+   "IBAN_VALID_NOT_ACCOUNT_EXISTENCE",
+   "BIC_CANDIDATE_NOT_CONFIRMED",
+   "DIRECTORY_PARTIAL",
+   "REACHABILITY_NOT_GUARANTEED"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "iban_formatted": "ES48 9901 0001 8101 2345 6789",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "REGISTERED",
+  "sct_inst_participation_status": "REGISTERED",
+  "sdd_core_participation_status": "REGISTERED",
+  "sdd_b2b_participation_status": "REGISTERED",
+  "sepa_bic": "TSTAESM1XXX",
+  "sepa_match": "EXACT",
+  "sepa_dates": {
+   "SCT": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SCT_INST": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SDD_CORE": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SDD_B2B": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   }
+  },
+  "sepa_participant_name": "ENTIDAD DE PRUEBA UNO, S.A."
+ },
+ "invalid_iban": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "ES",
+  "country_name": {
+   "en": "Spain",
+   "es": "España"
+  },
+  "iban_valid": false,
+  "iban_checksum_valid": false,
+  "iban_structure_valid": true,
+  "national_check": "VALID",
+  "national_bank_code": "9901",
+  "national_bank_code_type": {
+   "en": "Entity code (NRBE, Banco de España)",
+   "es": "Código de entidad (NRBE, Banco de España)"
+  },
+  "branch_code": "0001",
+  "bank_name": "ENTIDAD DE PRUEBA UNO, S.A.",
+  "bank_legal_name": "ENTIDAD DE PRUEBA UNO, S.A.",
+  "bank_city": null,
+  "lei": "TESTLEI0000000000001",
+  "bank_status": "ACTIVE",
+  "successor_code": null,
+  "bic_candidates": [
+   "TSTAESM1XXX"
+  ],
+  "bic_status": "CANDIDATES",
+  "bic_relation": "LEI_CHAIN",
+  "bank_identification_status": "IDENTIFIED",
+  "bank_source": {
+   "id": "bde_mfi_es",
+   "institution": "Banco de España",
+   "license": "ATTRIBUTION_REQUIRED",
+   "attribution": "Fuente: Elaboración propia a partir de datos de la web del Banco de España (www.bde.es).",
+   "url": "https://www.bde.es/webbe/es/estadisticas/otras-clasificaciones/clasificacion-entidades/listas-instituciones-financieras/listas-instituciones-financieras-monetarias-pais/lista-mfi-es.html",
+   "relation": "OFFICIAL_LIST"
+  },
+  "bank_source_date": "2026-10-28",
+  "warnings": [
+   "IBAN_VALID_NOT_ACCOUNT_EXISTENCE",
+   "IDENTIFICATION_FROM_INVALID_IBAN",
+   "BIC_CANDIDATE_NOT_CONFIRMED",
+   "DIRECTORY_PARTIAL",
+   "REACHABILITY_NOT_GUARANTEED"
+  ],
+  "errors": [
+   "CHECKSUM"
+  ],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "iban_formatted": "ES98 9901 0001 8101 2345 6789",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "REGISTERED",
+  "sct_inst_participation_status": "REGISTERED",
+  "sdd_core_participation_status": "REGISTERED",
+  "sdd_b2b_participation_status": "REGISTERED",
+  "sepa_bic": "TSTAESM1XXX",
+  "sepa_match": "EXACT",
+  "sepa_dates": {
+   "SCT": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SCT_INST": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SDD_CORE": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SDD_B2B": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   }
+  },
+  "sepa_participant_name": "ENTIDAD DE PRUEBA UNO, S.A."
+ },
+ "country_without_directory": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "FR",
+  "country_name": {
+   "en": "France",
+   "es": "Francia"
+  },
+  "iban_valid": true,
+  "iban_checksum_valid": true,
+  "iban_structure_valid": true,
+  "national_check": "VALID",
+  "national_bank_code": "20041",
+  "national_bank_code_type": {
+   "en": "Bank code (code banque, CIB)",
+   "es": "Código de banco (code banque, CIB)"
+  },
+  "branch_code": "01005",
+  "bank_name": null,
+  "bank_legal_name": null,
+  "bank_city": null,
+  "lei": null,
+  "bank_status": null,
+  "successor_code": null,
+  "bic_candidates": [],
+  "bic_status": "NONE",
+  "bic_relation": null,
+  "bank_identification_status": "DIRECTORY_NOT_AVAILABLE",
+  "bank_source": null,
+  "bank_source_date": null,
+  "warnings": [
+   "IBAN_VALID_NOT_ACCOUNT_EXISTENCE"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "iban_formatted": "FR14 2004 1010 0505 0001 3M02 606",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "UNKNOWN",
+  "sct_inst_participation_status": "UNKNOWN",
+  "sdd_core_participation_status": "UNKNOWN",
+  "sdd_b2b_participation_status": "UNKNOWN",
+  "sepa_bic": null,
+  "sepa_match": "NONE",
+  "sepa_dates": {}
+ },
+ "directory_pending_licence": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "BE",
+  "country_name": {
+   "en": "Belgium",
+   "es": "Bélgica"
+  },
+  "iban_valid": true,
+  "iban_checksum_valid": true,
+  "iban_structure_valid": true,
+  "national_check": "VALID",
+  "national_bank_code": "539",
+  "national_bank_code_type": {
+   "en": "Bank identification code (protocol)",
+   "es": "Código de identificación bancaria (protocolo)"
+  },
+  "branch_code": null,
+  "bank_name": null,
+  "bank_legal_name": null,
+  "bank_city": null,
+  "lei": null,
+  "bank_status": null,
+  "successor_code": null,
+  "bic_candidates": [],
+  "bic_status": "NONE",
+  "bic_relation": null,
+  "bank_identification_status": "DIRECTORY_PENDING_LICENCE",
+  "bank_source": null,
+  "bank_source_date": null,
+  "warnings": [
+   "IBAN_VALID_NOT_ACCOUNT_EXISTENCE"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "iban_formatted": "BE68 5390 0754 7034",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "UNKNOWN",
+  "sct_inst_participation_status": "UNKNOWN",
+  "sdd_core_participation_status": "UNKNOWN",
+  "sdd_b2b_participation_status": "UNKNOWN",
+  "sepa_bic": null,
+  "sepa_match": "NONE",
+  "sepa_dates": {}
+ },
+ "bank_not_found": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "ES",
+  "country_name": {
+   "en": "Spain",
+   "es": "España"
+  },
+  "iban_valid": true,
+  "iban_checksum_valid": true,
+  "iban_structure_valid": true,
+  "national_check": "VALID",
+  "national_bank_code": "9909",
+  "national_bank_code_type": {
+   "en": "Entity code (NRBE, Banco de España)",
+   "es": "Código de entidad (NRBE, Banco de España)"
+  },
+  "branch_code": "0001",
+  "bank_name": null,
+  "bank_legal_name": null,
+  "bank_city": null,
+  "lei": null,
+  "bank_status": null,
+  "successor_code": null,
+  "bic_candidates": [],
+  "bic_status": "NONE",
+  "bic_relation": null,
+  "bank_identification_status": "NOT_FOUND",
+  "bank_source": {
+   "id": "bde_mfi_es",
+   "attribution": "Fuente: Elaboración propia a partir de datos de la web del Banco de España (www.bde.es).",
+   "relation": "OFFICIAL_LIST"
+  },
+  "bank_source_date": "2026-10-28",
+  "warnings": [
+   "IBAN_VALID_NOT_ACCOUNT_EXISTENCE"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "iban_formatted": "ES59 9909 0001 5101 2345 6789",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "UNKNOWN",
+  "sct_inst_participation_status": "UNKNOWN",
+  "sdd_core_participation_status": "UNKNOWN",
+  "sdd_b2b_participation_status": "UNKNOWN",
+  "sepa_bic": null,
+  "sepa_match": "NONE",
+  "sepa_dates": {}
+ },
+ "ambiguous": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "GB",
+  "country_name": {
+   "en": "United Kingdom",
+   "es": "Reino Unido"
+  },
+  "iban_valid": true,
+  "iban_checksum_valid": true,
+  "iban_structure_valid": true,
+  "national_check": "NOT_AVAILABLE",
+  "national_bank_code": "TSTF",
+  "national_bank_code_type": {
+   "en": "Bank code (BIC institution code) + sort code",
+   "es": "Código de banco (código de entidad del BIC) + sort code"
+  },
+  "branch_code": "123456",
+  "bank_name": "Testing Bank plc",
+  "bank_legal_name": "Testing Bank plc",
+  "bank_city": "London",
+  "lei": null,
+  "bank_status": "ACTIVE",
+  "successor_code": null,
+  "bic_candidates": [
+   "TSTFGB21XXX",
+   "TSTFGB22XXX"
+  ],
+  "bic_status": "CANDIDATES",
+  "bic_relation": "BIC_PREFIX_CONVENTION",
+  "bank_identification_status": "AMBIGUOUS",
+  "bank_source": {
+   "id": "epc_register",
+   "institution": "European Payments Council (EPC)",
+   "license": "ATTRIBUTION_REQUIRED",
+   "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+   "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+   "relation": "BIC_PREFIX_CONVENTION"
+  },
+  "bank_source_date": null,
+  "warnings": [
+   "IBAN_VALID_NOT_ACCOUNT_EXISTENCE",
+   "NATIONAL_CHECK_NOT_AVAILABLE",
+   "BIC_PREFIX_CONVENTION",
+   "REACHABILITY_NOT_GUARANTEED"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "iban_formatted": "GB32 TSTF 1234 5612 3456 78",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "REGISTERED",
+  "sct_inst_participation_status": "REGISTERED",
+  "sdd_core_participation_status": "NOT_REGISTERED",
+  "sdd_b2b_participation_status": "NOT_REGISTERED",
+  "sepa_bic": "TSTFGB21XXX",
+  "sepa_match": "EXACT",
+  "sepa_dates": {
+   "SCT": {
+    "readiness": "2019-09-09",
+    "leaving": null
+   },
+   "SCT_INST": {
+    "readiness": "2019-09-09",
+    "leaving": null
+   }
+  },
+  "sepa_participant_name": "Testing Bank plc"
+ },
+ "deletion_scheduled": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "DE",
+  "country_name": {
+   "en": "Germany",
+   "es": "Alemania"
+  },
+  "iban_valid": null,
+  "iban_checksum_valid": null,
+  "iban_structure_valid": null,
+  "national_check": null,
+  "national_bank_code": "20020099",
+  "national_bank_code_type": {
+   "en": "Bankleitzahl (BLZ)",
+   "es": "Bankleitzahl (BLZ)"
+  },
+  "branch_code": null,
+  "bank_name": "Prüfbank Zwei",
+  "bank_legal_name": "Prüfbank Zwei eG",
+  "bank_city": "Hamburg",
+  "lei": null,
+  "bank_status": "DELETION_SCHEDULED",
+  "successor_code": "10010099",
+  "bic_candidates": [
+   "TSTIDEH1XXX"
+  ],
+  "bic_status": "CONFIRMED",
+  "bic_relation": "OFFICIAL_LIST",
+  "bank_identification_status": "IDENTIFIED",
+  "bank_source": {
+   "id": "bundesbank_blz",
+   "institution": "Deutsche Bundesbank",
+   "license": "ATTRIBUTION_REQUIRED",
+   "attribution": "Source: Deutsche Bundesbank (Bankleitzahlendatei). Datos normalizados por Cryptopocket.",
+   "url": "https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218",
+   "relation": "OFFICIAL_LIST"
+  },
+  "bank_source_date": null,
+  "warnings": [
+   "CODE_DELETION_SCHEDULED"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  },
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "NOT_REGISTERED",
+  "sct_inst_participation_status": "NOT_REGISTERED",
+  "sdd_core_participation_status": "NOT_REGISTERED",
+  "sdd_b2b_participation_status": "NOT_REGISTERED",
+  "sepa_bic": null,
+  "sepa_match": "NONE",
+  "sepa_dates": {}
+ },
+ "bic_lookup": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "bic": "TSTAESM1XXX",
+  "bic_valid": true,
+  "warnings": [
+   "REACHABILITY_NOT_GUARANTEED"
+  ],
+  "errors": [],
+  "institution_code": "TSTA",
+  "country_code": "ES",
+  "location_code": "M1",
+  "branch_code": "XXX",
+  "is_head_office": true,
+  "is_test_bic": false,
+  "country_name": {
+   "en": "Spain",
+   "es": "España"
+  },
+  "bank_name": "ENTIDAD DE PRUEBA UNO, S.A.",
+  "national_identifiers": [],
+  "bank_identification_status": "IDENTIFIED",
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "REGISTERED",
+  "sct_inst_participation_status": "REGISTERED",
+  "sdd_core_participation_status": "REGISTERED",
+  "sdd_b2b_participation_status": "REGISTERED",
+  "sepa_bic": "TSTAESM1XXX",
+  "sepa_match": "EXACT",
+  "sepa_dates": {
+   "SCT": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SCT_INST": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SDD_CORE": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   },
+   "SDD_B2B": {
+    "readiness": "2017-11-21",
+    "leaving": null
+   }
+  },
+  "sepa_participant_name": "ENTIDAD DE PRUEBA UNO, S.A.",
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-28T16:18:19Z",
+   "stale": false
+  }
+ },
+ "status": {
+  "engine_version": "2.0.0",
+  "data_version": "d7c7b7f7a1721710",
+  "schwifty": "2026.10.1",
+  "checked": "2026-10-28T16:18:19Z",
+  "sources": {
+   "bde_mfi_es": {
+    "attribution": "Fuente: Elaboración propia a partir de datos de la web del Banco de España (www.bde.es).",
+    "effective_date": "2026-10-28",
+    "institution": "Banco de España",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4,
+    "terms_url": "https://www.bde.es/wbe/en/estadisticas/recursos/terminos/terminos-de-uso.html",
+    "url": "https://www.bde.es/webbe/es/estadisticas/otras-clasificaciones/clasificacion-entidades/listas-instituciones-financieras/listas-instituciones-financieras-monetarias-pais/lista-mfi-es.html"
+   },
+   "bundesbank_blz": {
+    "attribution": "Source: Deutsche Bundesbank (Bankleitzahlendatei). Datos normalizados por Cryptopocket.",
+    "effective_date": "",
+    "institution": "Deutsche Bundesbank",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4,
+    "terms_url": "https://www.bundesbank.de/en/homepage/user-information/conditions-for-the-general-use-of-the-website-764706",
+    "url": "https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218"
+   },
+   "cnb_bank_codes": {
+    "attribution": "Zdroj: ČNB. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "Česká národní banka (ČNB)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 2,
+    "terms_url": "https://www.cnb.cz/cs/ochrana-osobnich-udaju-a-pravni-ujednani/podminky-uzivani-internetovych-stranek-cnb/",
+    "url": "https://www.cnb.cz/cs/platebni-styk/ucty-kody-bank/"
+   },
+   "ecb_mfi": {
+    "attribution": "Source: European Central Bank, List of MFIs.",
+    "effective_date": "",
+    "institution": "Banco Central Europeo (BCE)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 1,
+    "terms_url": "https://www.ecb.europa.eu/services/disclaimer/html/index.en.html",
+    "url": "https://www.ecb.europa.eu/stats/financial_corporations/list_of_financial_institutions/html/index.en.html"
+   },
+   "epc_register": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 9,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sct": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 19,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sct_inst": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 9,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sdd_b2b": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 3,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sdd_core": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 5,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "gleif_bic_lei": {
+    "attribution": "BIC-to-LEI relationship: SWIFT © and database rights {date}. All rights reserved. Licence: GLEIF/SWIFT BIC-to-LEI Mapping Table License; www.swift.com/bic",
+    "effective_date": "",
+    "institution": "GLEIF / SWIFT (BIC-to-LEI relationship file)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4,
+    "terms_url": "https://www.gleif.org/lei-data/lei-mapping/download-bic-to-lei-relationship-files/2017-12-21_annex-2_bic-to-lei-mapping-table-license-agreement_final.pdf",
+    "url": "https://www.gleif.org/en/lei-data/lei-mapping/download-bic-to-lei-relationship-files"
+   },
+   "gleif_lei_records": {
+    "attribution": "LEI data: GLEIF, CC0.",
+    "effective_date": "",
+    "institution": "GLEIF (LEI records API)",
+    "last_change": "",
+    "license": "VERIFIED_PUBLIC_USE",
+    "records": 0,
+    "terms_url": "https://www.gleif.org/en/about/open-data",
+    "url": "https://www.gleif.org/en/lei-data/gleif-api"
+   },
+   "oenb_sepa_directory": {
+    "attribution": "Quelle: Oesterreichische Nationalbank (OeNB), CC BY 4.0. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "Oesterreichische Nationalbank (OeNB)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 3,
+    "terms_url": "https://www.oenb.at/Service/Impressum-und-Haftung.html",
+    "url": "https://www.oenb.at/"
+   },
+   "schwifty_at": {
+    "attribution": "Quelle: OeNB, CC BY 4.0 (via schwifty).",
+    "effective_date": "schwifty 2026.10.1",
+    "institution": "OeNB (vía paquete schwifty)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 866,
+    "terms_url": "https://www.oenb.at/Service/Impressum-und-Haftung.html",
+    "url": "https://www.oenb.at/docroot/downloads_observ/sepa-zv-vz_gesamt.csv"
+   },
+   "schwifty_cz": {
+    "attribution": "Zdroj: ČNB (via schwifty).",
+    "effective_date": "schwifty 2026.10.1",
+    "institution": "ČNB (vía paquete schwifty)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 47,
+    "terms_url": "https://www.cnb.cz/cs/ochrana-osobnich-udaju-a-pravni-ujednani/podminky-uzivani-internetovych-stranek-cnb/",
+    "url": "https://www.cnb.cz/cs/platebni-styk/.galleries/ucty_kody_bank/download/kody_bank_CR.csv"
+   },
+   "schwifty_de": {
+    "attribution": "Source: Deutsche Bundesbank (via schwifty).",
+    "effective_date": "schwifty 2026.10.1",
+    "institution": "Deutsche Bundesbank (vía paquete schwifty)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4805,
+    "terms_url": "https://www.bundesbank.de/en/homepage/user-information/conditions-for-the-general-use-of-the-website-764706",
+    "url": "https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen"
+   },
+   "swift_iban_registry": {
+    "attribution": "IBAN structures: SWIFT IBAN Registry (ISO 13616), via schwifty (MIT).",
+    "effective_date": "",
+    "institution": "SWIFT (IBAN Registry, ISO 13616) vía schwifty",
+    "last_change": "",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 0,
+    "terms_url": "https://www.swift.com/standards/data-standards/iban-international-bank-account-number",
+    "url": "https://www.swift.com/standards/data-standards/iban-international-bank-account-number"
+   }
+  },
+  "source_status": {
+   "bde_mfi_es": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "bundesbank_blz": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "cnb_bank_codes": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "ecb_mfi": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "epc_sct": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "epc_sct_inst": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "epc_sdd_b2b": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "epc_sdd_core": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "gleif_bic_lei": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "oenb_sepa_directory": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "schwifty_at": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "schwifty_cz": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   },
+   "schwifty_de": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:19Z",
+    "last_success": "2026-10-28T16:18:19Z",
+    "status": "updated"
+   }
+  },
+  "conflicts": 0
+ },
+ "stale_data": {
+  "engine_version": "2.0.0",
+  "lookup_timestamp": "2026-10-28T12:00:00.000Z",
+  "country_code": "DE",
+  "country_name": {
+   "en": "Germany",
+   "es": "Alemania"
+  },
+  "iban_valid": null,
+  "iban_checksum_valid": null,
+  "iban_structure_valid": null,
+  "national_check": null,
+  "national_bank_code": "10010099",
+  "national_bank_code_type": {
+   "en": "Bankleitzahl (BLZ)",
+   "es": "Bankleitzahl (BLZ)"
+  },
+  "branch_code": null,
+  "bank_name": "Prüfbank Eins",
+  "bank_legal_name": "Prüfbank Eins AG",
+  "bank_city": "Berlin",
+  "lei": null,
+  "bank_status": "ACTIVE",
+  "successor_code": null,
+  "bic_candidates": [
+   "TSTCDEB1XXX"
+  ],
+  "bic_status": "CONFIRMED",
+  "bic_relation": "OFFICIAL_LIST",
+  "bank_identification_status": "IDENTIFIED",
+  "bank_source": {
+   "id": "bundesbank_blz",
+   "institution": "Deutsche Bundesbank",
+   "license": "ATTRIBUTION_REQUIRED",
+   "attribution": "Source: Deutsche Bundesbank (Bankleitzahlendatei). Datos normalizados por Cryptopocket.",
+   "url": "https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218",
+   "relation": "OFFICIAL_LIST"
+  },
+  "bank_source_date": null,
+  "warnings": [
+   "REACHABILITY_NOT_GUARANTEED",
+   "DATA_STALE"
+  ],
+  "errors": [],
+  "data_freshness": {
+   "data_version": "d7c7b7f7a1721710",
+   "checked": "2026-10-01T05:00:00Z",
+   "stale": true
+  },
+  "epc_register_date": "2026-10-28",
+  "sct_participation_status": "REGISTERED",
+  "sct_inst_participation_status": "REGISTERED",
+  "sdd_core_participation_status": "REGISTERED",
+  "sdd_b2b_participation_status": "REGISTERED",
+  "sepa_bic": "TSTCDEB1XXX",
+  "sepa_match": "EXACT",
+  "sepa_dates": {
+   "SCT": {
+    "readiness": "2019-05-01",
+    "leaving": null
+   },
+   "SCT_INST": {
+    "readiness": "2019-05-01",
+    "leaving": null
+   },
+   "SDD_CORE": {
+    "readiness": "2019-05-01",
+    "leaving": null
+   },
+   "SDD_B2B": {
+    "readiness": "2019-05-01",
+    "leaving": null
+   }
+  },
+  "sepa_participant_name": "Prüfbank Eins AG"
+ },
+ "sync_error_status": {
+  "engine_version": "2.0.0",
+  "data_version": "d7c7b7f7a1721710",
+  "schwifty": "2026.10.1",
+  "checked": "2026-10-01T05:00:00Z",
+  "sources": {
+   "bde_mfi_es": {
+    "attribution": "Fuente: Elaboración propia a partir de datos de la web del Banco de España (www.bde.es).",
+    "effective_date": "2026-10-28",
+    "institution": "Banco de España",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4,
+    "terms_url": "https://www.bde.es/wbe/en/estadisticas/recursos/terminos/terminos-de-uso.html",
+    "url": "https://www.bde.es/webbe/es/estadisticas/otras-clasificaciones/clasificacion-entidades/listas-instituciones-financieras/listas-instituciones-financieras-monetarias-pais/lista-mfi-es.html"
+   },
+   "bundesbank_blz": {
+    "attribution": "Source: Deutsche Bundesbank (Bankleitzahlendatei). Datos normalizados por Cryptopocket.",
+    "effective_date": "",
+    "institution": "Deutsche Bundesbank",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4,
+    "terms_url": "https://www.bundesbank.de/en/homepage/user-information/conditions-for-the-general-use-of-the-website-764706",
+    "url": "https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218"
+   },
+   "cnb_bank_codes": {
+    "attribution": "Zdroj: ČNB. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "Česká národní banka (ČNB)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 2,
+    "terms_url": "https://www.cnb.cz/cs/ochrana-osobnich-udaju-a-pravni-ujednani/podminky-uzivani-internetovych-stranek-cnb/",
+    "url": "https://www.cnb.cz/cs/platebni-styk/ucty-kody-bank/"
+   },
+   "ecb_mfi": {
+    "attribution": "Source: European Central Bank, List of MFIs.",
+    "effective_date": "",
+    "institution": "Banco Central Europeo (BCE)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 1,
+    "terms_url": "https://www.ecb.europa.eu/services/disclaimer/html/index.en.html",
+    "url": "https://www.ecb.europa.eu/stats/financial_corporations/list_of_financial_institutions/html/index.en.html"
+   },
+   "epc_register": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 9,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sct": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 19,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sct_inst": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 9,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sdd_b2b": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 3,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "epc_sdd_core": {
+    "attribution": "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "European Payments Council (EPC)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 5,
+    "terms_url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes",
+    "url": "https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes"
+   },
+   "gleif_bic_lei": {
+    "attribution": "BIC-to-LEI relationship: SWIFT © and database rights {date}. All rights reserved. Licence: GLEIF/SWIFT BIC-to-LEI Mapping Table License; www.swift.com/bic",
+    "effective_date": "",
+    "institution": "GLEIF / SWIFT (BIC-to-LEI relationship file)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4,
+    "terms_url": "https://www.gleif.org/lei-data/lei-mapping/download-bic-to-lei-relationship-files/2017-12-21_annex-2_bic-to-lei-mapping-table-license-agreement_final.pdf",
+    "url": "https://www.gleif.org/en/lei-data/lei-mapping/download-bic-to-lei-relationship-files"
+   },
+   "gleif_lei_records": {
+    "attribution": "LEI data: GLEIF, CC0.",
+    "effective_date": "",
+    "institution": "GLEIF (LEI records API)",
+    "last_change": "",
+    "license": "VERIFIED_PUBLIC_USE",
+    "records": 0,
+    "terms_url": "https://www.gleif.org/en/about/open-data",
+    "url": "https://www.gleif.org/en/lei-data/gleif-api"
+   },
+   "oenb_sepa_directory": {
+    "attribution": "Quelle: Oesterreichische Nationalbank (OeNB), CC BY 4.0. Datos normalizados por Cryptopocket.",
+    "effective_date": "2026-10-28",
+    "institution": "Oesterreichische Nationalbank (OeNB)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 3,
+    "terms_url": "https://www.oenb.at/Service/Impressum-und-Haftung.html",
+    "url": "https://www.oenb.at/"
+   },
+   "schwifty_at": {
+    "attribution": "Quelle: OeNB, CC BY 4.0 (via schwifty).",
+    "effective_date": "schwifty 2026.10.1",
+    "institution": "OeNB (vía paquete schwifty)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 866,
+    "terms_url": "https://www.oenb.at/Service/Impressum-und-Haftung.html",
+    "url": "https://www.oenb.at/docroot/downloads_observ/sepa-zv-vz_gesamt.csv"
+   },
+   "schwifty_cz": {
+    "attribution": "Zdroj: ČNB (via schwifty).",
+    "effective_date": "schwifty 2026.10.1",
+    "institution": "ČNB (vía paquete schwifty)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 47,
+    "terms_url": "https://www.cnb.cz/cs/ochrana-osobnich-udaju-a-pravni-ujednani/podminky-uzivani-internetovych-stranek-cnb/",
+    "url": "https://www.cnb.cz/cs/platebni-styk/.galleries/ucty_kody_bank/download/kody_bank_CR.csv"
+   },
+   "schwifty_de": {
+    "attribution": "Source: Deutsche Bundesbank (via schwifty).",
+    "effective_date": "schwifty 2026.10.1",
+    "institution": "Deutsche Bundesbank (vía paquete schwifty)",
+    "last_change": "2026-10-28",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 4805,
+    "terms_url": "https://www.bundesbank.de/en/homepage/user-information/conditions-for-the-general-use-of-the-website-764706",
+    "url": "https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen"
+   },
+   "swift_iban_registry": {
+    "attribution": "IBAN structures: SWIFT IBAN Registry (ISO 13616), via schwifty (MIT).",
+    "effective_date": "",
+    "institution": "SWIFT (IBAN Registry, ISO 13616) vía schwifty",
+    "last_change": "",
+    "license": "ATTRIBUTION_REQUIRED",
+    "records": 0,
+    "terms_url": "https://www.swift.com/standards/data-standards/iban-international-bank-account-number",
+    "url": "https://www.swift.com/standards/data-standards/iban-international-bank-account-number"
+   }
+  },
+  "source_status": {
+   "bde_mfi_es": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "bundesbank_blz": {
+    "status": "error",
+    "error": "FetchError: HTTP 503",
+    "last_check": "2026-10-01T05:00:00Z"
+   },
+   "cnb_bank_codes": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "ecb_mfi": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "epc_sct": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "epc_sct_inst": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "epc_sdd_b2b": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "epc_sdd_core": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "gleif_bic_lei": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "oenb_sepa_directory": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "schwifty_at": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "schwifty_cz": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   },
+   "schwifty_de": {
+    "error": "",
+    "last_check": "2026-10-28T16:18:31Z",
+    "last_success": "2026-10-28T16:18:31Z",
+    "status": "updated"
+   }
+  },
+  "conflicts": 0
+ }
+}

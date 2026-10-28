@@ -1,0 +1,357 @@
+# Registro maestro de fuentes de datos — SEPA Tools 2.0 (Cryptopocket)
+# El código lee este fichero: "publish: true" es la única forma de que los datos de una
+# fuente lleguen a los ficheros públicos (data/v2). Cualquier fuente con licencia
+# UNKNOWN / RESTRICTED / EXCLUDED se procesa como máximo para métricas internas.
+#
+# Estados de licencia:
+#   VERIFIED_PUBLIC_USE   términos verificados que permiten uso público y comercial sin condiciones relevantes
+#   ATTRIBUTION_REQUIRED  uso público permitido con atribución y condiciones (ver "conditions")
+#   VERIFIED_INTERNAL_ONLY solo uso interno
+#   UNKNOWN               fuente oficial accesible, términos de reutilización no verificados
+#   RESTRICTED            requiere licencia, pago, registro o prohíbe la redistribución
+#   EXCLUDED              no se usa (procedencia no oficial o incompatible)
+#
+# Última revisión de términos: 2026-10-28 (verificación documental hecha en esta fecha).
+
+version: 1
+last_review: "2026-10-28"
+defaults:
+  max_drop_ratio: 0.15        # bloquea la publicación si desaparece más de este % de registros
+  min_records: 1
+  retries: 3
+
+sources:
+
+  # ------------------------------------------------------------------ EPC
+  - id: epc_sct_inst
+    institution: European Payments Council (EPC)
+    countries: ALL_SEPA
+    url: https://www.europeanpaymentscouncil.eu/sites/default/files/participants_export/sct_inst/sct_inst.csv
+    info_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    type: scheme_register
+    fields: [Country, ParticipantName, Address, City, BIC, Readiness Date, Scheme Leaving Date, Scheme Options]
+    format: CSV (comillas, coma)
+    update_frequency: semanal (publicación automática desde la base de datos de participantes)
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    conditions: >-
+      Se permite ver, descargar y poner a disposición los datos del registro. No pueden explotarse
+      comercialmente como tales, en todo o en parte, salvo como parte de una oferta más amplia
+      (nuestro caso: herramienta gratuita enriquecida con otras fuentes). Hay que citar al EPC como
+      fuente, indicar si se han hecho cambios y no sugerir que el EPC respalda al usuario.
+    attribution: "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket."
+    commercial_reuse: solo como parte de una oferta más amplia
+    public_display: true
+    full_redistribution: false
+    priority: 10
+    publish: true
+    min_records: 1500
+    connector: epc
+    scheme: SCT_INST
+
+  - id: epc_sct
+    institution: European Payments Council (EPC)
+    countries: ALL_SEPA
+    url: https://www.europeanpaymentscouncil.eu/sites/default/files/participants_export/sct/sct.csv
+    info_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    type: scheme_register
+    format: CSV (comillas, coma)
+    update_frequency: semanal
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    conditions: Igual que epc_sct_inst.
+    attribution: "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket."
+    commercial_reuse: solo como parte de una oferta más amplia
+    public_display: true
+    full_redistribution: false
+    priority: 10
+    publish: true
+    min_records: 2000
+    connector: epc
+    scheme: SCT
+
+  - id: epc_sdd_core
+    institution: European Payments Council (EPC)
+    countries: ALL_SEPA
+    url: https://www.europeanpaymentscouncil.eu/sites/default/files/participants_export/sdd_core/sdd_core.csv
+    info_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    type: scheme_register
+    format: CSV (comillas, coma)
+    update_frequency: semanal
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    conditions: Igual que epc_sct_inst.
+    attribution: "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket."
+    commercial_reuse: solo como parte de una oferta más amplia
+    public_display: true
+    full_redistribution: false
+    priority: 10
+    publish: true
+    min_records: 1500
+    connector: epc
+    scheme: SDD_CORE
+
+  - id: epc_sdd_b2b
+    institution: European Payments Council (EPC)
+    countries: ALL_SEPA
+    url: https://www.europeanpaymentscouncil.eu/sites/default/files/participants_export/sdd_b2b/sdd_b2b.csv
+    info_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    type: scheme_register
+    format: CSV (comillas, coma)
+    update_frequency: semanal
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.europeanpaymentscouncil.eu/what-we-do/be-involved/register-participants/registers-participants-sepa-payment-schemes
+    conditions: Igual que epc_sct_inst.
+    attribution: "Fuente: European Payments Council (EPC), Register of Participants. Datos normalizados por Cryptopocket."
+    commercial_reuse: solo como parte de una oferta más amplia
+    public_display: true
+    full_redistribution: false
+    priority: 10
+    publish: true
+    min_records: 1200
+    connector: epc
+    scheme: SDD_B2B
+
+  # ------------------------------------------------------------------ Bancos centrales con directorio verificado
+  - id: bde_mfi_es
+    institution: Banco de España
+    countries: [ES]
+    url: https://www.bde.es/webbe/es/estadisticas/otras-clasificaciones/clasificacion-entidades/listas-instituciones-financieras/listas-instituciones-financieras-monetarias-pais/lista-mfi-es.csv
+    info_url: https://www.bde.es/webbe/es/estadisticas/otras-clasificaciones/clasificacion-entidades/listas-instituciones-financieras/listas-instituciones-financieras-monetarias-pais/lista-mfi-es.html
+    type: national_mfi_list
+    fields: [Código europeo, LEI, Nombre, Categoría, Dirección, Informe, Entidad matriz, Código supervisor]
+    format: CSV
+    update_frequency: diaria
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.bde.es/wbe/en/estadisticas/recursos/terminos/terminos-de-uso.html
+    conditions: >-
+      Estadísticas de acceso y uso libre. Citar "Fuente: Elaboración propia a partir de datos de la web
+      del Banco de España (www.bde.es)" e indicar la fecha de última actualización. Reproducción fiel,
+      sin alterar los contenidos (aviso legal). Si se vendiera, informar de que es gratuita en bde.es.
+    attribution: "Fuente: Elaboración propia a partir de datos de la web del Banco de España (www.bde.es)."
+    commercial_reuse: permitido con atribución
+    public_display: true
+    full_redistribution: true
+    relation_note: >-
+      El "Código supervisor" de 4 dígitos es el código de entidad asignado por el Banco de España
+      que figura en las posiciones 5-8 del IBAN español; el "Código europeo" (RIAD) es "ES" + ese
+      código. Cobertura: instituciones financieras monetarias (entidades de crédito y banco central).
+      No incluye entidades de pago ni de dinero electrónico.
+    priority: 1
+    publish: true
+    min_records: 50
+    connector: bde_mfi
+
+  - id: bundesbank_blz
+    institution: Deutsche Bundesbank
+    countries: [DE]
+    url: https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218
+    info_url: https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218
+    type: national_bank_code_directory
+    fields: [Bankleitzahl, Merkmal, Bezeichnung, PLZ, Ort, Kurzbezeichnung, PAN, BIC, Prüfzifferberechnungsmethode, Datensatz-Nr., Änderungskennzeichen, Hinweis Löschung, Nachfolge-BLZ]
+    format: TXT de ancho fijo (latin-1); también CSV y XML
+    update_frequency: trimestral (lunes siguiente al primer sábado de marzo, junio, septiembre y diciembre); se comprueba cada día
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.bundesbank.de/en/homepage/user-information/conditions-for-the-general-use-of-the-website-764706
+    conditions: >-
+      La información puede guardarse, reenviarse y reproducirse sin modificarla ni distorsionarla,
+      citando "Source: Deutsche Bundesbank". La publicación en internet es "no vinculante"; el canal
+      oficial para PSP es ExtraNet/NExt (no usado). Uso comercial del texto/datos no regulado de forma
+      expresa: se recomienda revisión legal antes de campañas comerciales.
+    attribution: "Source: Deutsche Bundesbank (Bankleitzahlendatei). Datos normalizados por Cryptopocket."
+    commercial_reuse: no regulado expresamente
+    public_display: true
+    full_redistribution: false
+    priority: 1
+    publish: true
+    min_records: 3000
+    connector: bundesbank
+
+  - id: oenb_sepa_directory
+    institution: Oesterreichische Nationalbank (OeNB)
+    countries: [AT]
+    url: https://www.oenb.at/docroot/downloads_observ/sepa-zv-vz_gesamt.csv
+    info_url: https://www.oenb.at/
+    type: national_bank_code_directory
+    fields: [Kennzeichen, Identnummer, Bankleitzahl, Institutsart, Sektor, Firmenbuchnummer, Bankenname, Straße, PLZ, Ort, ..., SWIFT-Code, Homepage, Gründungsdatum, LEI]
+    format: CSV (punto y coma, latin-1, cabecera precedida de líneas de aviso)
+    update_frequency: diaria
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.oenb.at/Service/Impressum-und-Haftung.html
+    conditions: Contenido © OeNB reutilizable bajo CC BY 4.0, también comercialmente. Citar la fuente y la licencia.
+    attribution: "Quelle: Oesterreichische Nationalbank (OeNB), CC BY 4.0. Datos normalizados por Cryptopocket."
+    commercial_reuse: permitido (CC BY 4.0)
+    public_display: true
+    full_redistribution: true
+    priority: 1
+    publish: true
+    min_records: 400
+    connector: oenb
+
+  - id: cnb_bank_codes
+    institution: Česká národní banka (ČNB)
+    countries: [CZ]
+    url: https://www.cnb.cz/cs/platebni-styk/.galleries/ucty_kody_bank/download/kody_bank_CR.csv
+    info_url: https://www.cnb.cz/cs/platebni-styk/ucty-kody-bank/
+    type: national_bank_code_directory
+    fields: [Kód banky, Název, SWIFT]
+    format: CSV (punto y coma, UTF-8)
+    update_frequency: cuando hay cambios
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.cnb.cz/cs/ochrana-osobnich-udaju-a-pravni-ujednani/podminky-uzivani-internetovych-stranek-cnb/
+    conditions: 'Se permite guardar, transmitir y reproducir citando "Zdroj: ČNB" y sin alterar los hechos.'
+    attribution: "Zdroj: ČNB. Datos normalizados por Cryptopocket."
+    commercial_reuse: no regulado expresamente
+    public_display: true
+    full_redistribution: true
+    priority: 1
+    publish: true
+    min_records: 20
+    connector: cnb
+
+  - id: ecb_mfi
+    institution: Banco Central Europeo (BCE)
+    countries: EU
+    url: https://www.ecb.europa.eu/stats/financial_corporations/list_of_financial_institutions/html/daily_list-MID.en.html
+    info_url: https://www.ecb.europa.eu/stats/financial_corporations/list_of_financial_institutions/html/index.en.html
+    type: mfi_list
+    fields: [RIAD_CODE, LEI, COUNTRY_OF_REGISTRATION, NAME, BOX, ADDRESS, POSTAL, CITY, CATEGORY, HEAD_COUNTRY_OF_REGISTRATION, HEAD_NAME, HEAD_RIAD_CODE, HEAD_LEI, REPORT]
+    format: CSV tabulado UTF-16LE (también .gz)
+    update_frequency: diaria
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.ecb.europa.eu/services/disclaimer/html/index.en.html
+    conditions: Uso libre citando al BCE como fuente; indicar modificaciones; si se vende, avisar de que es gratuita en la web del BCE.
+    attribution: "Source: European Central Bank, List of MFIs."
+    commercial_reuse: permitido con atribución
+    public_display: true
+    full_redistribution: true
+    relation_note: >-
+      RIAD_CODE es un identificador estadístico. Solo se relaciona con códigos de IBAN cuando existe
+      evidencia documental (España: Código europeo = "ES" + código de entidad del Banco de España).
+      En el resto de países se usa solo para enriquecer por LEI (nombre legal, categoría, estado).
+    priority: 5
+    publish: true
+    min_records: 3000
+    connector: ecb_mfi
+
+  # ------------------------------------------------------------------ GLEIF
+  - id: gleif_bic_lei
+    institution: GLEIF / SWIFT (BIC-to-LEI relationship file)
+    countries: ALL
+    url: https://mapping.gleif.org/api/v2/bic-lei
+    info_url: https://www.gleif.org/en/lei-data/lei-mapping/download-bic-to-lei-relationship-files
+    type: identifier_mapping
+    fields: [BIC, LEI]
+    format: ZIP con CSV
+    update_frequency: mensual
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.gleif.org/lei-data/lei-mapping/download-bic-to-lei-relationship-files/2017-12-21_annex-2_bic-to-lei-mapping-table-license-agreement_final.pdf
+    conditions: >-
+      Licencia gratuita, mundial, transferible y sublicenciable para cualquier fin, incluido el
+      comercial. Toda copia total o parcial debe incluir el aviso "SWIFT © and database rights
+      [fecha]. All rights reserved." con referencia a la licencia y a www.swift.com/bic.
+    attribution: "BIC-to-LEI relationship: SWIFT © and database rights {date}. All rights reserved. Licence: GLEIF/SWIFT BIC-to-LEI Mapping Table License; www.swift.com/bic"
+    commercial_reuse: permitido
+    public_display: true
+    full_redistribution: true
+    priority: 3
+    publish: true
+    min_records: 10000
+    connector: gleif_bic_lei
+
+  - id: gleif_lei_records
+    institution: GLEIF (LEI records API)
+    countries: ALL
+    url: https://api.gleif.org/api/v1/lei-records
+    info_url: https://www.gleif.org/en/lei-data/gleif-api
+    type: entity_register
+    fields: [lei, legalName, legalAddress.country, status]
+    format: JSON API
+    update_frequency: diaria
+    auth: false
+    subscription: false
+    license: VERIFIED_PUBLIC_USE
+    terms_url: https://www.gleif.org/en/about/open-data
+    conditions: Datos LEI bajo CC0. Se cita GLEIF por buena práctica.
+    attribution: "LEI data: GLEIF, CC0."
+    commercial_reuse: permitido
+    public_display: true
+    full_redistribution: true
+    priority: 4
+    publish: true
+    min_records: 1
+    connector: gleif_lei
+
+  # ------------------------------------------------------------------ Estándar IBAN
+  - id: swift_iban_registry
+    institution: SWIFT (IBAN Registry, ISO 13616) vía schwifty
+    countries: ALL
+    url: https://www.swift.com/standards/data-standards/iban-international-bank-account-number
+    info_url: https://www.swift.com/standards/data-standards/iban-international-bank-account-number
+    type: technical_standard
+    fields: [country, iban_length, bban_spec, bank_identifier_position, branch_identifier_position]
+    format: incluido en la librería schwifty (generado del registro TXT de SWIFT)
+    update_frequency: según versión de schwifty fijada en requirements.txt
+    auth: false
+    subscription: false
+    license: ATTRIBUTION_REQUIRED
+    terms_url: https://www.swift.com/standards/data-standards/iban-international-bank-account-number
+    conditions: >-
+      SWIFT publica el registro gratuitamente; la página no fija condiciones de reproducción. Se usan
+      solo hechos técnicos (longitudes y posiciones), no el documento. Se cita la fuente.
+    attribution: "IBAN structures: SWIFT IBAN Registry (ISO 13616), via schwifty (MIT)."
+    commercial_reuse: hechos técnicos
+    public_display: true
+    full_redistribution: false
+    priority: 1
+    publish: true
+    connector: none
+
+  # ------------------------------------------------------------------ Directorios oficiales vía schwifty (pendientes de licencia)
+  # El dato procede de una fuente oficial, procesada por los scripts MIT de schwifty. La licencia
+  # MIT del código NO cubre los datos: se publica solo si la licencia de la fuente original lo permite.
+  - {id: schwifty_de, institution: "Deutsche Bundesbank (vía paquete schwifty)", countries: [DE], upstream: bundesbank_blz, url: "https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen", type: derived_bundle, format: JSON en el paquete schwifty, update_frequency: con cada versión de schwifty, auth: false, subscription: false, license: ATTRIBUTION_REQUIRED, terms_url: "https://www.bundesbank.de/en/homepage/user-information/conditions-for-the-general-use-of-the-website-764706", conditions: "Respaldo de bundesbank_blz si la descarga directa falla; mismas condiciones.", attribution: "Source: Deutsche Bundesbank (via schwifty).", priority: 2, publish: true, connector: schwifty_bundle, bundle_files: [generated_de.json], fallback_for: bundesbank_blz}
+  - {id: schwifty_at, institution: "OeNB (vía paquete schwifty)", countries: [AT], upstream: oenb_sepa_directory, url: "https://www.oenb.at/docroot/downloads_observ/sepa-zv-vz_gesamt.csv", type: derived_bundle, format: JSON en el paquete schwifty, update_frequency: con cada versión de schwifty, auth: false, subscription: false, license: ATTRIBUTION_REQUIRED, terms_url: "https://www.oenb.at/Service/Impressum-und-Haftung.html", conditions: "Respaldo de oenb_sepa_directory; CC BY 4.0.", attribution: "Quelle: OeNB, CC BY 4.0 (via schwifty).", priority: 2, publish: true, connector: schwifty_bundle, bundle_files: [generated_at.v2.json], fallback_for: oenb_sepa_directory}
+  - {id: schwifty_cz, institution: "ČNB (vía paquete schwifty)", countries: [CZ], upstream: cnb_bank_codes, url: "https://www.cnb.cz/cs/platebni-styk/.galleries/ucty_kody_bank/download/kody_bank_CR.csv", type: derived_bundle, format: JSON en el paquete schwifty, update_frequency: con cada versión de schwifty, auth: false, subscription: false, license: ATTRIBUTION_REQUIRED, terms_url: "https://www.cnb.cz/cs/ochrana-osobnich-udaju-a-pravni-ujednani/podminky-uzivani-internetovych-stranek-cnb/", conditions: "Respaldo de cnb_bank_codes; citar Zdroj: ČNB.", attribution: "Zdroj: ČNB (via schwifty).", priority: 2, publish: true, connector: schwifty_bundle, bundle_files: [generated_cz.json], fallback_for: cnb_bank_codes}
+  - {id: schwifty_be, institution: "Nationale Bank van België (vía schwifty)", countries: [BE], url: "https://www.nbb.be/doc/be/be/protocol/full_list_current.xlsx", type: derived_bundle, format: XLSX oficial procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://nbb.be/en/node/15363", conditions: "La NBB indica que los BIC se publican 'solo con fines exploratorios'; sin licencia de reutilización explícita.", attribution: "Source: National Bank of Belgium.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_be.v2.json]}
+  - {id: schwifty_ch, institution: "SIX Interbank Clearing — Bank Master (vía schwifty)", countries: [CH], url: "https://api.six-group.com/api/epcd/bankmaster/v3/bankmaster.json", type: derived_bundle, format: JSON oficial procesado por schwifty, update_frequency: diaria, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://six-group.com/en/products-services/banking-services/interbank-clearing/online-services/download-bank-master.html", conditions: "Descarga pública; condiciones de uso de SIX no verificadas.", attribution: "Source: SIX Interbank Clearing, Bank Master.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_ch.v2.json]}
+  - {id: schwifty_li, institution: "SIX Interbank Clearing — Bank Master (vía schwifty)", countries: [LI], url: "https://api.six-group.com/api/epcd/bankmaster/v3/bankmaster.json", type: derived_bundle, format: JSON oficial procesado por schwifty, update_frequency: diaria, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://six-group.com/en/products-services/banking-services/interbank-clearing/online-services/download-bank-master.html", conditions: "Descarga pública; condiciones de uso de SIX no verificadas.", attribution: "Source: SIX Interbank Clearing, Bank Master.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_li.json]}
+  - {id: schwifty_fi, institution: "Finanssiala (Finance Finland) (vía schwifty)", countries: [FI], url: "https://www.finanssiala.fi/en/topics/payment-services-in-finland/payment-technical-documents/", type: derived_bundle, format: XLSX procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.finanssiala.fi/", conditions: "Asociación sectorial; términos no verificados.", attribution: "Source: Finance Finland.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_fi.v2.json]}
+  - {id: schwifty_hr, institution: "Hrvatska narodna banka (vía schwifty)", countries: [HR], url: "https://www.hnb.hr/documents/20182/121798/tf-pp-ds-vbb-xlsx-e-vbb.xlsx/", type: derived_bundle, format: XLSX oficial procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.hnb.hr/", conditions: "Términos de reutilización no verificados.", attribution: "Source: Croatian National Bank.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_hr.json]}
+  - {id: schwifty_hu, institution: "Magyar Nemzeti Bank (vía schwifty)", countries: [HU], url: "https://www.mnb.hu/letoltes/sht.xlsx", type: derived_bundle, format: XLSX oficial procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.mnb.hu/", conditions: "Términos de reutilización no verificados.", attribution: "Source: Magyar Nemzeti Bank.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_hu.json]}
+  - {id: schwifty_lt, institution: "Lietuvos bankas (vía schwifty)", countries: [LT], url: "https://www.lb.lt/zinynai/branches.aspx", type: derived_bundle, format: XML oficial procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.lb.lt/", conditions: "Términos de reutilización no verificados.", attribution: "Source: Bank of Lithuania.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_lt.json]}
+  - {id: schwifty_lv, institution: "Latvijas Banka (vía schwifty)", countries: [LV], url: "https://www.bank.lv/images/stories/pielikumi/makssist/bic_saraksts_22.01.2020_eng.xls", type: derived_bundle, format: XLS oficial de 2020 procesado por schwifty, update_frequency: sin actualizar desde 2020, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.bank.lv/", conditions: "Fichero de 22-01-2020 (desactualizado); términos no verificados.", attribution: "Source: Latvijas Banka.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_lv.json]}
+  - {id: schwifty_nl, institution: "Betaalvereniging Nederland (vía schwifty)", countries: [NL], url: "https://www.betaalvereniging.nl/wp-content/uploads/BIC-lijst-NL.xlsx", type: derived_bundle, format: XLSX procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.betaalvereniging.nl/", conditions: "Asociación sectorial; términos no verificados.", attribution: "Source: Dutch Payments Association.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_nl.json]}
+  - {id: schwifty_no, institution: "Bits AS (vía schwifty)", countries: [NO], url: "https://www.bits.no/document/iban/", type: derived_bundle, format: XLSX procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.bits.no/", conditions: "Entidad sectorial; términos no verificados.", attribution: "Source: Bits AS.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_no.v2.json]}
+  - {id: schwifty_pl, institution: "Narodowy Bank Polski (vía schwifty)", countries: [PL], url: "https://ewib.nbp.pl/plewibnra?dokNazwa=plewibnra.txt", type: derived_bundle, format: TXT oficial procesado por schwifty, update_frequency: diaria, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://ewib.nbp.pl/", conditions: "Registro público por normativa; términos de reutilización no verificados.", attribution: "Source: Narodowy Bank Polski.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_pl.v2.json]}
+  - {id: schwifty_se, institution: "Bankinfrastruktur i Sverige (vía schwifty)", countries: [SE], url: "https://www.bankinfrastruktur.se/framtidens-betalningsinfrastruktur/iban-och-svenskt-nationellt-kontonummer", type: derived_bundle, format: PDF de 2023 procesado por schwifty, update_frequency: irregular, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.bankinfrastruktur.se/", conditions: "Entidad sectorial; términos no verificados.", attribution: "Source: Bankinfrastruktur i Sverige.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_se.json]}
+  - {id: schwifty_si, institution: "Banka Slovenije (vía schwifty)", countries: [SI], url: "https://www.bsi.si/sl/d/seznam-identifikacijskih-oznak-pps", type: derived_bundle, format: CSV oficial procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.bsi.si/", conditions: "Términos de reutilización no verificados.", attribution: "Source: Banka Slovenije.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_si.json]}
+  - {id: schwifty_sk, institution: "Národná banka Slovenska (vía schwifty)", countries: [SK], url: "https://www.nbs.sk/_img/Documents/_PlatobneSystemy/EUROSIPS/Directory_IC_DPS_SR.csv", type: derived_bundle, format: CSV oficial procesado por schwifty, update_frequency: cuando hay cambios, auth: false, subscription: false, license: UNKNOWN, terms_url: "https://www.nbs.sk/", conditions: "Términos de reutilización no verificados.", attribution: "Source: Národná banka Slovenska.", priority: 2, publish: false, connector: schwifty_bundle, bundle_files: [generated_sk.json]}
+
+  # ------------------------------------------------------------------ Excluidas
+  - {id: schwifty_es, institution: "iban.es (web de terceros, vía schwifty)", countries: [ES], url: "https://www.iban.es/bancos/", type: third_party_scrape, license: EXCLUDED, conditions: "Datos extraídos de una web privada de terceros, no del Banco de España. Sustituida por bde_mfi_es.", priority: 99, publish: false, connector: none}
+  - {id: schwifty_it, institution: "ibancalculator.com + Banca d'Italia (vía schwifty)", countries: [IT], url: "https://www.ibancalculator.com/blz.html", type: third_party_scrape, license: EXCLUDED, conditions: "BIC y códigos obtenidos de un servicio comercial de terceros.", priority: 99, publish: false, connector: none}
+  - {id: schwifty_ro, institution: "internationalmoneytransfers.org (vía schwifty)", countries: [RO], url: "https://internationalmoneytransfers.org/romania-swift-codes/", type: third_party_scrape, license: EXCLUDED, conditions: "Web de terceros, no oficial.", priority: 99, publish: false, connector: none}
+  - {id: schwifty_manual, institution: "Ficheros manual_*.json de schwifty", countries: [AD, BG, CY, DK, ES, FR, GB, GR, IE, IS, IT, LU, MC, MD, ME, MT, PT, RO], url: "https://github.com/mdomke/schwifty/tree/main/schwifty/bank_registry", type: community_curated, license: EXCLUDED, conditions: "Datos mantenidos a mano por la comunidad sin procedencia documentada por registro.", priority: 99, publish: false, connector: none}
+  - {id: bdf_fib, institution: "Banque de France — Fichier des implantations bancaires (FIB)", countries: [FR, MC], url: "https://www.banque-france.fr/fr/a-votre-service/banques-assurances-prestataires-fiduciaires/fichier-implantations-bancaires-fib", type: national_bank_code_directory, license: RESTRICTED, conditions: "Distribución bajo contrato de pago.", priority: 99, publish: false, connector: none}
+  - {id: swiftref, institution: "SWIFT SwiftRef", countries: ALL, url: "https://www.swift.com/our-solutions/compliance-and-shared-services/swiftref", type: commercial_directory, license: EXCLUDED, conditions: "Servicio comercial de pago; fuera del alcance por decisión de Cryptopocket.", priority: 99, publish: false, connector: none}
