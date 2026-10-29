@@ -54,6 +54,8 @@ def fetch(url: str, etag: str = "", last_modified: str = "", retries: int = 3, t
                 return FetchResult(url=url, status=304, not_modified=True, etag=etag, last_modified=last_modified)
             if e.code in (401, 403, 407):
                 raise FetchError(f"HTTP {e.code}: acceso no autorizado; no se reintenta ni se elude") from e
+            if e.code in (404, 406, 410):
+                raise FetchError(f"HTTP {e.code} en {url}: no se reintenta (revisar URL o cabecera Accept)") from e
             last_err = e
             if e.code == 429:
                 time.sleep(30 * (attempt + 1))

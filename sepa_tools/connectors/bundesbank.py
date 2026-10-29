@@ -39,7 +39,7 @@ class BundesbankConnector(Connector):
         if not m:
             raise ValueError("no se encuentra el enlace blz-aktuell-txt-data.txt en la página del Bundesbank")
         self._valid = ""
-        v = re.search(r"valid\s+(?:from\s+)?(\d{2})\.(\d{2})\.(\d{4})", html, re.I)
+        v = re.search(r"(?:valid\s+(?:from\s+)?|g(?:ü|ue)ltig\s+(?:ab\s+|vom\s+)?)(\d{2})\.(\d{2})\.(\d{4})", html, re.I)
         if v:
             self._valid = f"{v[3]}-{v[2]}-{v[1]}"
         url = urljoin(self.cfg["url"], m.group(1))
@@ -70,4 +70,11 @@ class BundesbankConnector(Connector):
         return out
 
     def effective_date(self, raw, meta) -> str:
-        return getattr(self, "_valid", "")
+        if getattr(self, "_valid", ""):
+            return self._valid
+        lm = getattr(meta, "last_modified", "") or ""
+        try:
+            from email.utils import parsedate_to_datetime
+            return parsedate_to_datetime(lm).date().isoformat() if lm else ""
+        except (TypeError, ValueError):
+            return ""

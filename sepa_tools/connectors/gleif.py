@@ -27,7 +27,7 @@ class GLEIFBicLeiConnector(Connector):
     kind = "bic_lei"
 
     def download(self, state):
-        idx = fetch(self.cfg["url"], retries=int(self.cfg.get("retries", 3)), accept="application/json")
+        idx = fetch(self.cfg["url"], retries=int(self.cfg.get("retries", 3)), accept="application/vnd.api+json")
         files = json.loads(idx.content.decode("utf-8"))["data"]
         valid = [f for f in files if f.get("attributes", {}).get("valid", True)]
         latest = max(valid, key=lambda f: f["attributes"].get("uploadedAt", ""))

@@ -93,7 +93,9 @@ class BdEMFIConnector(Connector):
     Se aceptan entidades de crédito y el banco central con "Código supervisor" de 4 dígitos.
     """
     kind = "bank_code"
-    INCLUDE = ("credito", "banco central", "central bank", "credit institution")
+    INCLUDE = ("credito", "banco central", "central bank", "credit institution", "s121", "s122")
+    # Valores de categoría que sí excluimos aunque tengan código: fondos del mercado monetario.
+    EXCLUDE = ("monetari", "money market", "fmm", "s123")
 
     def parse(self, raw: bytes, meta) -> list:
         text = decode_text(raw, prefer=("utf-8-sig", "utf-16", "cp1252", "latin-1"))
@@ -102,8 +104,10 @@ class BdEMFIConnector(Connector):
         alias = {"codigoeuropeo": "riad", "europeancode": "riad", "lei": "lei", "nombre": "name", "name": "name",
                  "categoria": "category", "category": "category", "direccion": "address", "address": "address",
                  "entidadmatriz": "parent", "parententity": "parent", "codigosupervisor": "code",
-                 "supervisorcode": "code"}
+                 "codigodesupervisor": "code", "supervisorcode": "code"}
         cols = {alias[h]: i for i, h in enumerate(header) if h in alias}
+        if "code" not in cols:  # tolerar variantes del nombre ("Código de supervisor", "Supervisory code"…)
+            cols.update({"code": i for i, h in enumerate(header) if "supervis" in h})
         if "code" not in cols or "name" not in cols:
             raise ValueError(f"columnas BdE inesperadas: {header}")
 
@@ -111,22 +115,28 @@ class BdEMFIConnector(Connector):
             i = cols.get(k)
             return clean(row[i]) if i is not None and i < len(row) else ""
 
-        out = []
+        out, loose = [], []
         for row in reader:
             if not row or not any(row):
                 continue
             code = g(row, "code")
             cat = strip_accents(g(row, "category")).lower()
-            if not re.fullmatch(r"\d{4}", code) or not any(k in cat for k in self.INCLUDE):
+            if not re.fullmatch(r"\d{4}", code) or any(k in cat for k in self.EXCLUDE):
                 continue
+            target = out if any(k in cat for k in self.INCLUDE) else loose
             riad = g(row, "riad").upper()
-            out.append({
+            target.append({
                 "kind": "bank_code", "country": "ES", "code": code, "primary": True, "name": g(row, "name"),
                 "legal_name": g(row, "name"), "lei": norm_lei(g(row, "lei")), "category": g(row, "category"),
                 "address": g(row, "address"), "riad": riad, "parent_riad": g(row, "parent").upper(),
                 "riad_matches_code": riad == f"ES{code}",
                 "relation": "OFFICIAL_LIST", "src": self.source_id,
             })
+        if not out and loose:
+            # Si el Banco de España cambia la redacción de "categoría", la lista IFM solo contiene
+            # banco central, entidades de crédito y fondos monetarios; los fondos no tienen código
+            # de supervisor de 4 dígitos, así que las filas con ese código son entidades de crédito.
+            out = loose
         if not out:
             raise ValueError("ninguna entidad de crédito con código de 4 dígitos")
         return out
