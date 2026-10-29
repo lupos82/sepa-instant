@@ -98,8 +98,11 @@ jobs:
       - name: Avisar si alguna fuente falló o un control no se cumple
         if: always()
         run: |
-          python -m sepa_tools check-run
-          python -m sepa_tools selftest
+          # Se ejecutan los dos controles aunque el primero falle, para ver todos los avisos de una vez.
+          rc=0
+          python -m sepa_tools check-run || rc=1
+          python -m sepa_tools selftest || rc=1
+          exit $rc
 
   deploy:
     # Se publica aunque el paso de avisos falle: los avisos generan un correo, no bloquean la web.

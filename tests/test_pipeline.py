@@ -287,3 +287,17 @@ def test_contraste_con_lista_mfi_del_bce(base):
     assert "m" not in es["codes"]["9903"]
     cov = jl(root, "data/v2/coverage.json")
     assert cov["totals"]["codes_confirmed_in_ecb_mfi"] >= 1
+
+
+def test_bde_cabecera_real_2026_y_categorias_variables():
+    """Cabecera observada en la descarga real del 29-10-2026 (codigoDeSupervisor) y categorías con otra redacción."""
+    from sepa_tools.connectors.national import BdEMFIConnector
+    con = BdEMFIConnector("bde_mfi_es")
+    hdr = "codigoEuropeo;lei;nombre;categoria;direccion;informe;entidadMatriz;codigoDeSupervisor\n"
+    raw = (hdr + "ES9901;;ENTIDAD UNO, S.A.;ENTIDADES DE CREDITO;Madrid;S;;9901\n"
+           "ESX1;;FONDO DE PRUEBA;FONDOS DEL MERCADO MONETARIO;;S;;\n").encode("utf-8")
+    recs = con.parse(raw, None)
+    assert [r["code"] for r in recs] == ["9901"]
+    # categoría en otro formato (código sectorial): se aceptan las filas con código de supervisor de 4 dígitos
+    raw2 = (hdr + "ES0049;;BANCO DE PRUEBA, S.A.;XYZ;Santander;S;;0049\nESX2;;FONDO;MMF;;S;;\n").encode("utf-8")
+    assert [r["code"] for r in con.parse(raw2, None)] == ["0049"]
