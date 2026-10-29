@@ -1,5 +1,87 @@
 [
  {
+  "data_version": "79e92e2abfdaf68f",
+  "date": "2026-10-29",
+  "errors": [
+   "bde_mfi_es: ValueError: columnas BdE inesperadas: ['codigoeuropeo', 'lei', 'nombre', 'categoria', 'direccion', 'informe', 'entidadmatriz', 'codigodesupervisor']",
+   "gleif_bic_lei: FetchError: no se pudo descargar https://mapping.gleif.org/api/v2/bic-lei: HTTP Error 406: Not Acceptable"
+  ],
+  "sources": {
+   "bde_mfi_es": {
+    "error": "ValueError: columnas BdE inesperadas: ['codigoeuropeo', 'lei', 'nombre', 'categoria', 'direccion', 'informe', 'entidadmatriz', 'codigodesupervisor']",
+    "status": "error"
+   },
+   "bundesbank_blz": {
+    "diff": {
+     "added": 13751,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "cnb_bank_codes": {
+    "diff": {
+     "added": 47,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "ecb_mfi": {
+    "diff": {
+     "added": 4634,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "epc_sct": {
+    "diff": {
+     "added": 3501,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "epc_sct_inst": {
+    "diff": {
+     "added": 0,
+     "modified": 2843,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "epc_sdd_b2b": {
+    "diff": {
+     "added": 2288,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "epc_sdd_core": {
+    "diff": {
+     "added": 2734,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "gleif_bic_lei": {
+    "error": "FetchError: no se pudo descargar https://mapping.gleif.org/api/v2/bic-lei: HTTP Error 406: Not Acceptable",
+    "status": "error"
+   },
+   "oenb_sepa_directory": {
+    "diff": {
+     "added": 874,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   }
+  }
+ },
+ {
   "data_version": "d465fc6bcbf0cd4f",
   "date": "2026-10-28",
   "errors": [],

@@ -1,14 +1,81 @@
 {
  "bde_mfi_es": {},
- "bundesbank_blz": {},
- "cnb_bank_codes": {},
- "ecb_mfi": {},
- "epc_sct": {},
- "epc_sct_inst": {},
- "epc_sdd_b2b": {},
- "epc_sdd_core": {},
+ "bundesbank_blz": {
+  "etag": "W/3a97fff9893732591adbbfcb70c1c4e8",
+  "last_change": "2026-10-29",
+  "last_modified": "",
+  "records": 13760,
+  "sha256": "5872bf19298f55cc0594d22656b72e0f8ff277faedbf5b18f9b7f3bcae4c606b",
+  "version": ""
+ },
+ "cnb_bank_codes": {
+  "effective_date": "2026-10-29",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "Fri, 25 Sep 2026 11:10:55 GMT",
+  "records": 47,
+  "sha256": "0d318aaad97ed4d1a6d134efe69a4f73bb99c8d498d4c006073a0c1a21c0c67f",
+  "version": ""
+ },
+ "ecb_mfi": {
+  "effective_date": "2026-10-28",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "Wed, 28 Oct 2026 16:06:28 GMT",
+  "records": 4634,
+  "sha256": "b1e3d79ba5e008bdff4adbda25126e27dd7f7f475adb16eb9a4e73e60f5bad06",
+  "version": ""
+ },
+ "epc_sct": {
+  "effective_date": "2026-10-09",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "Fri, 09 Oct 2026 07:34:07 GMT",
+  "records": 3501,
+  "sha256": "00ab000a6941a6d3ecf13ecaa0c46c10650c4f5b766f49108aa5059652d86b34",
+  "version": ""
+ },
+ "epc_sct_inst": {
+  "effective_date": "2026-10-09",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "Fri, 09 Oct 2026 07:30:48 GMT",
+  "records": 2843,
+  "sha256": "497fc198cb7f6c843d1244cf23dbc42d2b6a909dd19083996eae53a918e487f3",
+  "version": ""
+ },
+ "epc_sdd_b2b": {
+  "effective_date": "2026-10-09",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "Fri, 09 Oct 2026 07:30:54 GMT",
+  "records": 2288,
+  "sha256": "d9f25836439b9271505ed7663363b6f4b6477a442a8036a70b814d1870e1ce4b",
+  "version": ""
+ },
+ "epc_sdd_core": {
+  "effective_date": "2026-10-09",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "Fri, 09 Oct 2026 07:32:14 GMT",
+  "records": 2734,
+  "sha256": "68a0239ca452670919d23a2f9771f0d202765eb0a25f1991128f710c18e0150b",
+  "version": ""
+ },
  "gleif_bic_lei": {},
- "oenb_sepa_directory": {},
+ "gleif_lei_records": {
+  "effective_date": "",
+  "records": 0
+ },
+ "oenb_sepa_directory": {
+  "effective_date": "2026-10-29",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "",
+  "records": 874,
+  "sha256": "798915f0f983e65639cc7df352f27fd4ebe4ebe13abdd9d3dbc1687686bb91e1",
+  "version": ""
+ },
  "schwifty_at": {
   "effective_date": "schwifty 2026.10.1",
   "etag": "",
