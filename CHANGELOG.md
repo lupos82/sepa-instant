@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.0 — 2026-10-29
+
+- 12 países más con directorio (BE, CH, LI, FI, HR, HU, LT, NO, PL, SE, SI, SK) por aceptación de riesgo documentada del COO.
+- Francia, Mónaco, Luxemburgo y Grecia: entidades identificadas por su código RIAD en la lista MFI del BCE (`ECB_RIAD_CONVENTION`, con aviso; solo entidades de crédito; sin páginas por código).
+- BIC candidatos por LEI: se priorizan los inscritos en el EPC y se descartan los de pruebas o pasivos que no figuran en el EPC.
+- Correcciones de fuentes: nueva cabecera del Banco de España, Accept de GLEIF, fecha del Bundesbank.
+- 28 países con identificación del banco (antes 12).
+
 ## 2.0.0 — 2026-10-28 (rama `sepa-tools-2.0`, pendiente de revisión)
 
 ### Añadido

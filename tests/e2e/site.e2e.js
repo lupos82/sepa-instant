@@ -90,9 +90,13 @@ process.on('unhandledRejection', (e) => {
     const t = await type('/tools/en/iban-bank-lookup/', '#q-identify', bad);
     assert(/Invalid IBAN/.test(t), t);
   });
-  await check('FR: sin directorio, se muestra el código extraído', async () => {
+  await check('IT: sin directorio, se muestra el código extraído', async () => {
+    const t = await type('/tools/es/identificar-banco-iban/', '#q-identify', 'IT60X0542811101000000123456');
+    assert(/Directorio bancario no disponible/.test(t) && /05428/.test(t), t);
+  });
+  await check('FR: entidad identificada por la lista del BCE, con aviso', async () => {
     const t = await type('/tools/es/identificar-banco-iban/', '#q-identify', 'FR1420041010050500013M02606');
-    assert(/Directorio bancario no disponible/.test(t) && /20041/.test(t), t);
+    assert(/BANQUE DE PRUEBA FRANCE/.test(t) && /lista oficial de entidades del BCE/.test(t), t);
   });
   await check('BE: pendiente de licencia', async () => {
     const t = await type('/tools/es/validar-iban/', '#q-iban', 'BE68539007547034');

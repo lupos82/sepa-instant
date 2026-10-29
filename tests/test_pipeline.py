@@ -71,7 +71,13 @@ def test_descarga_inicial_publica_paises(base):
     specs = jl(root, "data/v2/iban-specs.json")
     assert len(specs) == 42
     assert specs["ES"]["directory"] == "published"
-    assert specs["FR"]["directory"] == "none"           # FIB de pago: sin directorio
+    assert specs["IT"]["directory"] == "none"           # sin directorio público reutilizable
+    assert specs["FR"]["directory"] == "published"      # vía lista MFI del BCE (FIB es de pago)
+    fr = jl(root, "data/v2/banks/FR.json")
+    assert fr["relation"] == "ECB_RIAD_CONVENTION" and fr["codes"]["20041"]["n"] == "BANQUE DE PRUEBA FRANCE"
+    lu = jl(root, "data/v2/banks/LU.json")
+    assert "099" in lu["codes"] and len(lu["codes"]) == 1   # LUB01234 no encaja con 3 dígitos
+    assert "099" in jl(root, "data/v2/banks/GR.json")["codes"]
     assert specs["BE"]["directory"] == "pending_licence"  # NBB: licencia no verificada
 
 

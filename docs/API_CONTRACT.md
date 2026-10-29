@@ -54,7 +54,7 @@ const engine = SepaEngine.create({ baseUrl: 'https://cryptopocket.io/tools/data/
 | `bank_status` | `ACTIVE` / `DELETION_SCHEDULED` | `successor_code` si la fuente lo indica |
 | `bic_candidates[]` | BIC11 | BIC relacionados |
 | `bic_status` | `CONFIRMED` / `CANDIDATES` / `NONE` | |
-| `bic_relation` | `OFFICIAL_LIST` / `LEI_CHAIN` / `BIC_PREFIX_CONVENTION` | Cómo se relacionó el BIC |
+| `bic_relation` | `OFFICIAL_LIST` / `LEI_CHAIN` / `BIC_PREFIX_CONVENTION` | Cómo se relacionó el BIC (`bank_source.relation` puede ser además `ECB_RIAD_CONVENTION`: entidad identificada por su código en la lista MFI del BCE) |
 | `bank_identification_status` | ver abajo | |
 | `bank_source{id, institution, license, attribution, url, relation}`, `bank_source_date` | | Trazabilidad del dato |
 | `sct_participation_status`, `sct_inst_participation_status`, `sdd_core_participation_status`, `sdd_b2b_participation_status` | `REGISTERED` / `FUTURE` / `LEFT` / `NOT_REGISTERED` / `UNKNOWN` | Registro del EPC para el BIC (`UNKNOWN` si no hay BIC o no hay datos de ese esquema) |
@@ -86,6 +86,7 @@ const engine = SepaEngine.create({ baseUrl: 'https://cryptopocket.io/tools/data/
 | `NATIONAL_CHECK_NOT_AVAILABLE` | Este país no tiene un dígito de control nacional verificable. |
 | `IDENTIFICATION_FROM_INVALID_IBAN` | El IBAN no es válido; la entidad mostrada corresponde al código, pero puede haber un error de escritura. |
 | `BIC_CANDIDATE_NOT_CONFIRMED` | BIC candidato obtenido por el LEI de la entidad; no confirmado por la fuente oficial. |
+| `ECB_RIAD_CONVENTION` | Entidad identificada por su código en la lista oficial de entidades del BCE (FR, MC, LU, GR); solo entidades de crédito. |
 | `BIC_PREFIX_CONVENTION` | BIC deducido de que el código bancario coincide con el prefijo BIC. |
 | `DIRECTORY_PARTIAL` | El directorio no incluye todas las entidades (p. ej., entidades de pago). |
 | `FALLBACK_SOURCE` | Datos de la copia del directorio oficial incluida en schwifty (la descarga directa no estaba disponible). |

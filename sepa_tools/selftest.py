@@ -11,6 +11,8 @@ from . import paths
 from .util import read_json
 
 CANARIES = [
+    ("FR", "30004", r"bnp"), ("FR", "20041", r"postale"), ("LU", "001", r"epargne|spuerkeess|bcee"),
+    ("LU", "014", r"\bing\b"), ("GR", "011", r"national bank of greece"), ("GR", "017", r"piraeus"),
     ("ES", "0049", r"santander"), ("ES", "0182", r"bilbao vizcaya|bbva"), ("ES", "2100", r"caixabank"),
     ("DE", "37040044", r"commerzbank"), ("DE", "10010010", r"postbank"), ("AT", "20111", r"erste"),
     ("CZ", "0800", r"spo[řr]itelna"), ("NL", "INGB", r"\bing\b"), ("NL", "ABNA", r"abn ?amro"),

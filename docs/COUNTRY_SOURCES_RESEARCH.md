@@ -16,26 +16,26 @@ Estado a 28-10-2026. "No localizada" significa que en esta investigación no se 
 | Malta | CBM | No localizada | — | 4 letras = BIC + 5 díg. | Prefijo BIC | — | — | **Publicado por prefijo BIC** |
 | Letonia | Latvijas Banka | Sí (fichero 2020) | XLS | 4 letras = BIC | Prefijo BIC | Desactualizado | No verificada | **Publicado por prefijo BIC**; lista oficial pendiente |
 | Gibraltar | GFSC | No localizada | — | 4 letras = BIC | Prefijo BIC | — | — | **Publicado por prefijo BIC** |
-| Bélgica | NBB (protocolo) | Sí | XLSX/XLS/PDF | 3 díg. (5–7) | BIC en la lista | Con cambios | No verificada ("fines exploratorios") | Pendiente de licencia |
-| Suiza | SIX Bank Master | Sí | JSON/CSV | IID 5 díg. (5–9) | BIC en el fichero | Diaria | No verificada | Pendiente de licencia |
-| Liechtenstein | SIX Bank Master | Sí | JSON/CSV | IID 5 díg. | BIC | Diaria | No verificada | Pendiente de licencia |
-| Finlandia | Finanssiala | Sí | XLSX | 3 díg. (5–7) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Croacia | HNB (VBB) | Sí | XLSX | 7 díg. (5–11) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Hungría | MNB | Sí | XLSX | 3 díg. (5–7) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Lituania | Lietuvos bankas | Sí | XML | 5 díg. (5–9) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Noruega | Bits AS | Sí | XLSX | 4 díg. (5–8) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Polonia | NBP (EWIB) | Sí | TXT | 8 díg. (5–12) | BIC | Diaria | No verificada | Pendiente de licencia |
-| Suecia | Bankinfrastruktur | Sí (PDF 2023) | PDF | 3 díg. (5–7) | BIC | Irregular | No verificada | Pendiente de licencia |
-| Eslovenia | Banka Slovenije | Sí | CSV | 2+3 díg. (5–9) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Eslovaquia | NBS | Sí | CSV | 4 díg. (5–8) | BIC | Con cambios | No verificada | Pendiente de licencia |
-| Francia | Banque de France (FIB) | No (contrato de pago) | — | 5 díg. (5–9) | — | — | Restringida | Sin directorio |
-| Mónaco | Sistema francés (BdF) | No | — | 5 díg. | — | — | Restringida | Sin directorio |
+| Bélgica | NBB (protocolo) | Sí | XLSX/XLS/PDF | 3 díg. (5–7) | BIC en la lista | Con cambios | No verificada ("fines exploratorios") | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Suiza | SIX Bank Master | Sí | JSON/CSV | IID 5 díg. (5–9) | BIC en el fichero | Diaria | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Liechtenstein | SIX Bank Master | Sí | JSON/CSV | IID 5 díg. | BIC | Diaria | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Finlandia | Finanssiala | Sí | XLSX | 3 díg. (5–7) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Croacia | HNB (VBB) | Sí | XLSX | 7 díg. (5–11) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Hungría | MNB | Sí | XLSX | 3 díg. (5–7) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Lituania | Lietuvos bankas | Sí | XML | 5 díg. (5–9) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Noruega | Bits AS | Sí | XLSX | 4 díg. (5–8) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Polonia | NBP (EWIB) | Sí | TXT | 8 díg. (5–12) | BIC | Diaria | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Suecia | Bankinfrastruktur | Sí (PDF 2023) | PDF | 3 díg. (5–7) | BIC | Irregular | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Eslovenia | Banka Slovenije | Sí | CSV | 2+3 díg. (5–9) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Eslovaquia | NBS | Sí | CSV | 4 díg. (5–8) | BIC | Con cambios | No verificada | **Publicado (riesgo aceptado por Cryptopocket)** |
+| Francia | Banque de France (FIB) | No (contrato de pago) | — | 5 díg. (5–9) | — | — | Restringida | **Publicado vía lista MFI del BCE** (RIAD = FR+CIB) |
+| Mónaco | Sistema francés (BdF) | No | — | 5 díg. | — | — | Restringida | **Publicado vía lista MFI del BCE** (bancos de Mónaco figuran con país FR) |
 | Italia | Banca d'Italia (albo, GIAVA) | Solo consulta interactiva | — | ABI 5 díg. (6–10) | — | — | No verificada | Sin directorio (schwifty IT excluido) |
 | San Marino | BCSM | No localizada | — | ABI 5 díg. (6–10) | — | — | — | Sin directorio |
 | Portugal | Banco de Portugal ("Lista IBAN") | Referenciada, no localizada | — | 4 díg. (5–8) | — | — | — | Sin directorio (seguimiento recomendado) |
-| Grecia | Bank of Greece (HEBIC) | No localizada | — | 3 díg. (5–7) | — | — | — | Sin directorio |
+| Grecia | Bank of Greece (HEBIC) | No localizada | — | 3 díg. (5–7) | — | — | — | **Publicado vía lista MFI del BCE** (RIAD = GR+código, parcial) |
 | Chipre | CBC | No localizada | — | 3 díg. (5–7) | — | — | — | Sin directorio |
-| Luxemburgo | BCL / ABBL | No localizada | — | 3 díg. (5–7) | — | — | — | Sin directorio |
+| Luxemburgo | BCL / ABBL | No localizada | — | 3 díg. (5–7) | — | — | — | **Publicado vía lista MFI del BCE** (RIAD = LUB00+código) |
 | Estonia | Eesti Pank | No localizada | — | 2 díg. (5–6) | — | — | — | Sin directorio |
 | Dinamarca | Finans Danmark (reg. nr.) | No localizada | — | 4 díg. (5–8) | — | — | — | Sin directorio |
 | Islandia | Seðlabanki | No localizada | — | 2 díg. (5–6) | — | — | — | Sin directorio |
