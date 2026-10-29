@@ -22,7 +22,7 @@
     },
     "post_build": ["cp integration/tools.htaccess $OUT_DIR/tools/.htaccess"],
     "deterministic": true,
-    "approx_output": {"files": 14770, "megabytes": 215}
+    "approx_output": {"files": 35500, "megabytes": 520}
   },
   "schedule": {
     "upstream_data_sync_utc": "05:17 diario (GitHub puede retrasarlo)",

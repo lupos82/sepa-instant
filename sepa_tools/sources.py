@@ -9,6 +9,13 @@ LICENSE_STATES = {"VERIFIED_PUBLIC_USE", "ATTRIBUTION_REQUIRED", "VERIFIED_INTER
 PUBLISHABLE = {"VERIFIED_PUBLIC_USE", "ATTRIBUTION_REQUIRED"}
 
 
+def _risk_accepted(s: dict) -> bool:
+    """Excepción documentada: licencia UNKNOWN publicada por decisión expresa de Cryptopocket.
+    Nunca aplica a RESTRICTED, EXCLUDED ni VERIFIED_INTERNAL_ONLY."""
+    r = s.get("risk_accepted") or {}
+    return s.get("license") == "UNKNOWN" and bool(r.get("by")) and bool(r.get("date"))
+
+
 @lru_cache(maxsize=4)
 def load(path: str = REGISTRY_FILE) -> dict:
     with open(path, encoding="utf-8") as f:
@@ -20,7 +27,7 @@ def load(path: str = REGISTRY_FILE) -> dict:
             raise ValueError(f"fuente duplicada: {s['id']}")
         if s.get("license") not in LICENSE_STATES:
             raise ValueError(f"{s['id']}: estado de licencia desconocido {s.get('license')!r}")
-        if s.get("publish") and s["license"] not in PUBLISHABLE:
+        if s.get("publish") and s["license"] not in PUBLISHABLE and not _risk_accepted(s):
             raise ValueError(f"{s['id']}: publish=true no permitido con licencia {s['license']}")
         merged = {**defaults, **s}
         out[s["id"]] = merged
@@ -37,4 +44,4 @@ def all_sources() -> dict:
 
 def is_publishable(source_id: str) -> bool:
     s = get(source_id)
-    return bool(s.get("publish")) and s["license"] in PUBLISHABLE
+    return bool(s.get("publish")) and (s["license"] in PUBLISHABLE or _risk_accepted(s))

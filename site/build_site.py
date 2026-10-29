@@ -177,7 +177,7 @@ JS = {
         "info_h": "Información", "bank_src": "Fuente bancaria", "epc_src": "Fuente SEPA: registros de participantes del EPC", "checked": "Datos comprobados el",
         "warn": {"REACHABILITY_NOT_GUARANTEED": "Estar inscrito en un esquema EPC no garantiza la entrega de una transferencia concreta.",
                  "BIC_CANDIDATE_NOT_CONFIRMED": "El BIC se ha obtenido por el LEI de la entidad (fichero GLEIF/SWIFT): es un candidato, no una relación confirmada por la fuente oficial.",
-                 "BIC_PREFIX_CONVENTION": "En este país el código bancario coincide con las 4 primeras letras del BIC; la entidad se deduce de los BIC registrados.",
+                 "ECB_RIAD_CONVENTION": "No hay un directorio público de códigos bancarios para este país: la entidad se identifica porque su código en la lista oficial de entidades del BCE contiene el código bancario del IBAN. Solo incluye entidades de crédito.", "BIC_PREFIX_CONVENTION": "En este país el código bancario coincide con las 4 primeras letras del BIC; la entidad se deduce de los BIC registrados.",
                  "CODE_DELETION_SCHEDULED": "El banco ha comunicado la baja de este código; se indica el código sucesor si existe.",
                  "DATA_STALE": "Los datos llevan más de 3 días sin comprobarse.", "DIRECTORY_PARTIAL": "El directorio de este país no incluye todas las entidades (por ejemplo, entidades de pago).",
                  "IBAN_VALID_NOT_ACCOUNT_EXISTENCE": "Un IBAN válido no confirma que la cuenta exista ni quién es su titular.",
@@ -215,7 +215,7 @@ JS = {
         "info_h": "Information", "bank_src": "Bank source", "epc_src": "SEPA source: EPC registers of participants", "checked": "Data checked on",
         "warn": {"REACHABILITY_NOT_GUARANTEED": "Being registered in an EPC scheme does not guarantee delivery of a specific transfer.",
                  "BIC_CANDIDATE_NOT_CONFIRMED": "The BIC was obtained via the institution's LEI (GLEIF/SWIFT file): it is a candidate, not a link confirmed by the official source.",
-                 "BIC_PREFIX_CONVENTION": "In this country the bank code equals the first 4 letters of the BIC; the institution is derived from registered BICs.",
+                 "ECB_RIAD_CONVENTION": "There is no public bank code directory for this country: the institution is identified because its identifier in the ECB official list of institutions contains the IBAN bank code. Credit institutions only.", "BIC_PREFIX_CONVENTION": "In this country the bank code equals the first 4 letters of the BIC; the institution is derived from registered BICs.",
                  "CODE_DELETION_SCHEDULED": "The bank has announced this code will be deleted; the successor code is shown where available.",
                  "DATA_STALE": "The data has not been checked for more than 3 days.", "DIRECTORY_PARTIAL": "This country's directory does not include every institution (for example payment institutions).",
                  "IBAN_VALID_NOT_ACCOUNT_EXISTENCE": "A valid IBAN does not confirm that the account exists or who holds it.",
@@ -311,6 +311,18 @@ def page(lang, path, title, desc, body, alts, crumbs=None, schema=None, nav=None
     with open(out, "w", encoding="utf-8") as f:
         f.write(doc)
     SITEMAP.append((path, alts))
+
+
+LIC_LABELS = {
+    "es": {"VERIFIED_PUBLIC_USE": "Uso público", "ATTRIBUTION_REQUIRED": "Reutilización con atribución",
+           "UNKNOWN": "Fuente oficial pública (citada)"},
+    "en": {"VERIFIED_PUBLIC_USE": "Public use", "ATTRIBUTION_REQUIRED": "Reuse with attribution",
+           "UNKNOWN": "Public official source (cited)"},
+}
+
+
+def lic_label(lic, lang):
+    return LIC_LABELS[lang].get(lic, lic)
 
 
 def faq_html(qas, lang):
@@ -792,7 +804,7 @@ def build_sources():
             if sid == "epc_register":
                 continue
             rows.append(f'<tr><td><a href="{E(s.get("url", ""))}" rel="nofollow noopener">{E(s.get("institution", sid))}</a></td><td class="mono">{E(sid)}</td>'
-                        f'<td>{E(s.get("license", ""))}</td><td>{E(s.get("attribution", ""))}</td><td class="num">{E(fmt_date(s.get("effective_date", ""), lang))}</td></tr>')
+                        f'<td>{E(lic_label(s.get("license", ""), lang))}</td><td>{E(s.get("attribution", ""))}</td><td class="num">{E(fmt_date(s.get("effective_date", ""), lang))}</td></tr>')
         title = "Fuentes de datos y licencias | Cryptopocket" if es else "Data sources and licences | Cryptopocket"
         desc = ("Fuentes oficiales y abiertas que usan las herramientas bancarias de Cryptopocket, con sus licencias, atribuciones y fechas." if es else
                 "Official and open sources used by Cryptopocket's banking tools, with their licences, attributions and dates.")

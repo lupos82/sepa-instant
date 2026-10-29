@@ -55,13 +55,26 @@ test('IBAN inválido: no se identifica banco', async () => {
   assert.ok(r.errors.includes('CHECKSUM'));
 });
 
-test('país sin directorio (FR): IBAN válido, banco no identificable', async () => {
-  const r = await engine.identifyByIban('FR1420041010050500013M02606');
+test('país sin directorio (IT): IBAN válido, banco no identificable', async () => {
+  const r = await engine.identifyByIban('IT60X0542811101000000123456');
   examples.country_without_directory = r;
   assert.strictEqual(r.iban_valid, true);
-  assert.strictEqual(r.national_bank_code, '20041');
+  assert.strictEqual(r.national_bank_code, '05428');
   assert.strictEqual(r.bank_identification_status, 'DIRECTORY_NOT_AVAILABLE');
   assert.strictEqual(r.bank_name, null);
+});
+
+test('Francia por la lista MFI del BCE: identificado con aviso de origen', async () => {
+  const r = await engine.identifyByIban('FR1420041010050500013M02606');
+  examples.identified_by_ecb_list = r;
+  assert.strictEqual(r.bank_identification_status, 'IDENTIFIED');
+  assert.strictEqual(r.bank_name, 'BANQUE DE PRUEBA FRANCE');
+  assert.strictEqual(r.bank_source.relation, 'ECB_RIAD_CONVENTION');
+  assert.ok(r.warnings.includes('ECB_RIAD_CONVENTION') && r.warnings.includes('DIRECTORY_PARTIAL'));
+  const lu = await engine.identifyByCode('LU', '99');
+  assert.strictEqual(lu.bank_name, 'BANQUE DE PRUEBA LUXEMBOURG');
+  const gr = await engine.identifyByCode('GR', '099');
+  assert.strictEqual(gr.bank_name, 'TRAPEZA DOKIMIS S.A.');
 });
 
 test('país con directorio pendiente de licencia (BE)', async () => {

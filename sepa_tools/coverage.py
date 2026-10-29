@@ -37,7 +37,7 @@ def compute(dataset: dict, state: dict) -> dict:
                 "license": sources.get(src)["license"] if src in sources.all_sources() else "ATTRIBUTION_REQUIRED",
                 "coverage": ("complete_vs_official_directory" if src in COMPLETE_VS_OFFICIAL else
                              "derived_bundle" if src in DERIVED_BUNDLE else
-                             "partial_credit_institutions_only" if src == "bde_mfi_es" else "not_quantifiable"),
+                             "partial_credit_institutions_only" if src in ("bde_mfi_es", "ecb_mfi") else "not_quantifiable"),
             })
         elif internal:
             e.update({"directory": "pending_licence", "source": internal["source"], "codes_internal": internal["codes"],

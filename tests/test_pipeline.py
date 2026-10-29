@@ -28,6 +28,12 @@ def make_root(tmp_path, scale_min=True):
         for s in reg["sources"]:
             if "min_records" in s:
                 s["min_records"] = 1
+    # Las pruebas mantienen BE como "pendiente de licencia" para cubrir ese estado
+    # (en producción BE se publica por aceptación de riesgo documentada).
+    for s in reg["sources"]:
+        if s["id"] == "schwifty_be":
+            s["publish"] = False
+            s.pop("risk_accepted", None)
     with open(root / "DATA_SOURCES_REGISTRY.yaml", "w", encoding="utf-8") as f:
         yaml.safe_dump(reg, f, allow_unicode=True, sort_keys=False)
     return root
@@ -65,7 +71,13 @@ def test_descarga_inicial_publica_paises(base):
     specs = jl(root, "data/v2/iban-specs.json")
     assert len(specs) == 42
     assert specs["ES"]["directory"] == "published"
-    assert specs["FR"]["directory"] == "none"           # FIB de pago: sin directorio
+    assert specs["IT"]["directory"] == "none"           # sin directorio público reutilizable
+    assert specs["FR"]["directory"] == "published"      # vía lista MFI del BCE (FIB es de pago)
+    fr = jl(root, "data/v2/banks/FR.json")
+    assert fr["relation"] == "ECB_RIAD_CONVENTION" and fr["codes"]["20041"]["n"] == "BANQUE DE PRUEBA FRANCE"
+    lu = jl(root, "data/v2/banks/LU.json")
+    assert "099" in lu["codes"] and len(lu["codes"]) == 1   # LUB01234 no encaja con 3 dígitos
+    assert "099" in jl(root, "data/v2/banks/GR.json")["codes"]
     assert specs["BE"]["directory"] == "pending_licence"  # NBB: licencia no verificada
 
 
@@ -301,3 +313,12 @@ def test_bde_cabecera_real_2026_y_categorias_variables():
     # categoría en otro formato (código sectorial): se aceptan las filas con código de supervisor de 4 dígitos
     raw2 = (hdr + "ES0049;;BANCO DE PRUEBA, S.A.;XYZ;Santander;S;;0049\nESX2;;FONDO;MMF;;S;;\n").encode("utf-8")
     assert [r["code"] for r in con.parse(raw2, None)] == ["0049"]
+
+
+def test_aceptacion_de_riesgo_solo_para_licencia_unknown(tmp_path):
+    from sepa_tools import sources
+    ok = {"id": "x", "license": "UNKNOWN", "publish": True, "risk_accepted": {"by": "COO", "date": "2026-10-29"}}
+    assert sources._risk_accepted(ok)
+    assert not sources._risk_accepted({**ok, "license": "RESTRICTED"})
+    assert not sources._risk_accepted({**ok, "license": "EXCLUDED"})
+    assert not sources._risk_accepted({**ok, "risk_accepted": {"by": "COO"}})   # sin fecha

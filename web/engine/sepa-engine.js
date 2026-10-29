@@ -219,7 +219,7 @@
         var src = (m && m.sources && m.sources[D.source]) || null;
         if (!e) {
           res.bank_identification_status = 'NOT_FOUND';
-          if (D.relation === 'BIC_PREFIX_CONVENTION') res.warnings.push('DIRECTORY_PARTIAL');
+          if (D.relation === 'BIC_PREFIX_CONVENTION' || D.relation === 'ECB_RIAD_CONVENTION') res.warnings.push('DIRECTORY_PARTIAL');
           res.bank_source = { id: D.source, attribution: D.attribution, relation: D.relation };
           return res;
         }
@@ -234,6 +234,7 @@
         if (e.st === 'DELETION_SCHEDULED') res.warnings.push('CODE_DELETION_SCHEDULED');
         if (e.x) res.warnings.push('SOURCE_CONFLICT');
         if (D.source === 'bde_mfi_es') res.warnings.push('DIRECTORY_PARTIAL');
+        if (D.relation === 'ECB_RIAD_CONVENTION') { res.warnings.push('ECB_RIAD_CONVENTION'); res.warnings.push('DIRECTORY_PARTIAL'); }
         if (/^schwifty_/.test(D.source)) res.warnings.push('FALLBACK_SOURCE');
         return res;
       }).catch(function () { res.bank_identification_status = 'DIRECTORY_NOT_AVAILABLE'; res.errors.push('DATA_LOAD'); return res; });

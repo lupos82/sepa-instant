@@ -23,6 +23,12 @@ def build(dest=os.path.join(HERE, ".tmp", "root"), stale=False):
     for s in reg["sources"]:
         if "min_records" in s:
             s["min_records"] = 1
+    # Las pruebas mantienen BE como "pendiente de licencia" para cubrir ese estado
+    # (en producción BE se publica por aceptación de riesgo documentada).
+    for s in reg["sources"]:
+        if s["id"] == "schwifty_be":
+            s["publish"] = False
+            s.pop("risk_accepted", None)
     with open(os.path.join(dest, "DATA_SOURCES_REGISTRY.yaml"), "w", encoding="utf-8") as f:
         yaml.safe_dump(reg, f, allow_unicode=True, sort_keys=False)
     fx = os.path.join(HERE, ".tmp", "fx")

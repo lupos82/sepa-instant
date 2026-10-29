@@ -106,7 +106,11 @@ def base_set():
            ["ESX0000001", "", "FONDO MONETARIO DE PRUEBA", "Fondos del mercado monetario", "", "Sí", "", ""],
            ["ES9000", "", "BANCO DE ESPAÑA", "Banco central", "Alcalá 48", "Sí", "", "9000"]]
     ecb = [["ES9901", LEI_A, "ES", "ENTIDAD DE PRUEBA UNO, S.A.", "", "", "", "MADRID", "Credit institution", "", "", "", "", "Yes"],
-           ["DE0000001", "", "DE", "Fondsgesellschaft", "", "", "", "Frankfurt", "Money market fund", "", "", "", "", "No"]]
+           ["DE0000001", "", "DE", "Fondsgesellschaft", "", "", "", "Frankfurt", "Money market fund", "", "", "", "", "No"],
+           ["FR20041", "", "FR", "BANQUE DE PRUEBA FRANCE", "", "", "", "PARIS", "Credit institution", "", "", "", "", "Yes"],
+           ["LUB00099", "", "LU", "BANQUE DE PRUEBA LUXEMBOURG", "", "", "", "LUXEMBOURG", "Credit institution", "", "", "", "", "Yes"],
+           ["LUB01234", "", "LU", "CODIGO LARGO NO APLICABLE", "", "", "", "LUXEMBOURG", "Credit institution", "", "", "", "", "Yes"],
+           ["GR099N", "", "GR", "TRAPEZA DOKIMIS S.A.", "", "", "", "ATHINA", "Credit institution", "", "", "", "", "Yes"]]
     gleif = [["TSTAESM1XXX", LEI_A], ["TSTBESB1XXX", LEI_B], ["TSTBESB1BIL", LEI_B], ["TSTFGB21XXX", "TESTLEI00000000000GB4"[:18] + "44"],
              ["ZZZZUS33XXX", "TESTLEI00000000000US5"[:18] + "55"]]
     return {"epc_sct_inst": epc_csv(epc_rows), "epc_sct": epc_csv(sct), "epc_sdd_core": epc_csv(epc_rows[:5]),

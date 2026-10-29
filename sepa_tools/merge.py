@@ -13,6 +13,7 @@ Reglas (ver DATA_NORMALIZATION.md):
      se marca el conflicto y prevalece la de mejor prioridad.
   5. Nunca se infiere un banco por similitud de nombres.
 """
+import re
 from collections import defaultdict
 
 from . import countries, ibanspec, sources
@@ -65,11 +66,17 @@ def _lei_names(snapshots):
     return names
 
 
-def _pick_bics_for_country(bics, prefix_countries):
-    """De un conjunto de BIC, los del país; prefiere oficina principal (XXX)."""
-    local = sorted(b for b in bics if b[4:6] in prefix_countries)
-    head = [b for b in local if b.endswith("XXX")]
-    return head or local
+def _pick_bics_for_country(bics, prefix_countries, sepa=None):
+    """De un conjunto de BIC (p. ej., todos los de un LEI), los del país, ordenados por fiabilidad:
+    1) inscritos en algún registro del EPC, 2) BIC conectado (8.º carácter distinto de 0/1:
+    0 = pruebas, 1 = participante pasivo), 3) oficina principal (XXX)."""
+    sepa = sepa or {}
+    local = [b for b in bics if b[4:6] in prefix_countries]
+    # Se descartan BIC de pruebas o pasivos que tampoco están en el EPC: no sirven para pagos
+    # (p. ej., NEWGFRP1 para Société Générale) y confundirían más que ayudar.
+    local = [b for b in local if b in sepa or b[7] not in "01"]
+    head = [b for b in local if b.endswith("XXX")] or local
+    return sorted(head, key=lambda b: (b not in sepa, b[7] in "01", b))
 
 
 def _directory_sources_by_country(snapshots, publishable_only):
@@ -117,6 +124,28 @@ def _aggregate_codes(recs, cc):
     return out
 
 
+# Países sin directorio público reutilizable en los que el identificador RIAD de la lista MFI del
+# BCE contiene el código bancario nacional del IBAN. Convención comprobada con entidades conocidas
+# (FR 30004 BNP Paribas, 30003 Société Générale, 20041 La Banque Postale; LU 001 BCEE, 002 BIL,
+# 014 ING; GR 011 NBG, 014 Alpha, 017 Piraeus, 026 Eurobank). No es una tabla oficial de códigos
+# IBAN: se publica con relación ECB_RIAD_CONVENTION y aviso.
+ECB_RIAD_RULES = {
+    # prefijo IBAN: (patrón RIAD, código, país de la lista del BCE)
+    "FR": (re.compile(r"^FR(\d{5})$"), lambda m: m.group(1), "FR"),
+    # Mónaco usa los códigos interbancarios franceses (CIB) y sus bancos figuran en la lista con país FR.
+    "MC": (re.compile(r"^FR(\d{5})$"), lambda m: m.group(1), "FR"),
+    "GR": (re.compile(r"^GR(\d{3})N?$"), lambda m: m.group(1), "GR"),
+    "LU": (re.compile(r"^LUB(\d{5})$"), lambda m: m.group(1)[-3:] if int(m.group(1)) < 1000 else None, "LU"),
+}
+ECB_ATTRIBUTION = "Source: European Central Bank, List of MFIs (entidad identificada por el código RIAD del BCE). Datos normalizados por Cryptopocket."
+
+
+def _ecb_records(snapshots):
+    for sid, recs in snapshots.items():
+        if sources.get(sid).get("connector") == "ecb_mfi" and sources.is_publishable(sid):
+            yield from recs
+
+
 def build_directory(snapshots: dict, on: str):
     """Devuelve (catálogo público por prefijo IBAN, conflictos, métricas internas)."""
     specs = ibanspec.all_specs()
@@ -125,6 +154,7 @@ def build_directory(snapshots: dict, on: str):
     pub_choice, _ = _directory_sources_by_country(snapshots, publishable_only=True)
     all_choice, all_by_cc = _directory_sources_by_country(snapshots, publishable_only=False)
     terr = countries.territory_parent()
+    sepa_all = build_sepa(snapshots, on)
 
     catalog, conflicts, internal = {}, [], {}
     for c in countries.countries():
@@ -154,7 +184,7 @@ def build_directory(snapshots: dict, on: str):
                 if g["bics"]:
                     e["b"], e["bs"], e["br"] = g["bics"], "CONFIRMED", "OFFICIAL_LIST"
                 elif rep.get("lei") and lei2bic.get(rep["lei"]):
-                    cand = _pick_bics_for_country(lei2bic[rep["lei"]], {prefix} | {k for k, v in terr.items() if v == prefix})
+                    cand = _pick_bics_for_country(lei2bic[rep["lei"]], {prefix} | {k for k, v in terr.items() if v == prefix}, sepa_all)
                     if cand:
                         e["b"], e["bs"], e["br"] = cand, "CANDIDATES", "LEI_CHAIN"
                 if rep.get("deleted"):
@@ -178,6 +208,29 @@ def build_directory(snapshots: dict, on: str):
                             entries[code]["x"] = 1
             catalog[prefix] = {"source": sid, "relation": "OFFICIAL_LIST", "codes": entries,
                                "code_type": c["code_type"], "effective_date": "", "attribution": cfg.get("attribution", "")}
+
+        elif prefix in ECB_RIAD_RULES:
+            rx, to_code, ecb_cc = ECB_RIAD_RULES[prefix]
+            bic_cc = {prefix, ecb_cc} | {k for k, v in terr.items() if v in (prefix, ecb_cc)}
+            for r in sorted(_ecb_records(snapshots), key=lambda r: (bool(r.get("head_riad")), r["riad"])):
+                if r.get("country") != ecb_cc:
+                    continue
+                m = rx.match(r["riad"])
+                code = to_code(m) if m else None
+                if not code or code in entries:
+                    continue
+                e = {"n": r["name"], "s": "ecb_mfi"}
+                if r.get("city"):
+                    e["c"] = r["city"]
+                if r.get("lei"):
+                    e["l"] = r["lei"]
+                    cand = _pick_bics_for_country(lei2bic.get(r["lei"], ()), bic_cc, sepa_all)
+                    if cand:
+                        e["b"], e["bs"], e["br"] = cand, "CANDIDATES", "LEI_CHAIN"
+                entries[code] = e
+            if entries:
+                catalog[prefix] = {"source": "ecb_mfi", "relation": "ECB_RIAD_CONVENTION", "codes": entries,
+                                   "code_type": c["code_type"], "effective_date": "", "attribution": ECB_ATTRIBUTION}
 
         elif ibanspec.bank_code_is_bic_prefix(spec):
             bic_cc = {prefix} | {k for k, v in terr.items() if v == prefix}
