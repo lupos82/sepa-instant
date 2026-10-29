@@ -17,11 +17,13 @@ Revisión documental del 28-10-2026. **No es asesoramiento jurídico**: se recom
 | SWIFT IBAN Registry (vía schwifty) | Descarga gratuita; sin términos de reproducción publicados | Se usan hechos técnicos (longitudes, posiciones), no el documento. | "IBAN structures: SWIFT IBAN Registry (ISO 13616), via schwifty (MIT)." |
 | schwifty (código) | MIT | La licencia MIT cubre el código, **no** los datos de terceros que incluye. | — |
 
-## Pendientes de verificación (importables, no publicados)
+## Publicadas por decisión de Cryptopocket (riesgo aceptado, 29-10-2026)
 
-NBB (BE), SIX Bank Master (CH, LI), Finanssiala (FI), HNB (HR), MNB (HU), Lietuvos bankas (LT), Latvijas Banka (LV, fichero de 2020), Betaalvereniging (NL), Bits (NO), NBP (PL), Bankinfrastruktur (SE), Banka Slovenije (SI), NBS (SK).
+NBB (BE), SIX Bank Master (CH, LI), Finanssiala (FI), HNB (HR), MNB (HU), Lietuvos bankas (LT), Bits (NO), NBP (PL), Bankinfrastruktur (SE), Banka Slovenije (SI), NBS (SK).
 
-Para activar una: revisar sus términos, documentar el resultado en `DATA_SOURCES_REGISTRY.yaml` (`license`, `terms_url`, `conditions`, `attribution`) y poner `publish: true`. El código impide `publish: true` con licencia `UNKNOWN`.
+Son directorios oficiales de descarga pública sin una licencia de reutilización explícita (`license: UNKNOWN`). Vicente Romero de Ávila (COO) aprobó su publicación asumiendo el riesgo; consta en `DATA_SOURCES_REGISTRY.yaml` (`risk_accepted`). Se publican con la cita de cada organismo. El código solo admite esta excepción para `UNKNOWN`, nunca para `RESTRICTED` ni `EXCLUDED`. Recomendación: pedir confirmación escrita a cada organismo y retirar la fuente (`publish: false`) si alguno lo solicita.
+
+Siguen sin publicar como directorio: Latvijas Banka (fichero de 2020) y Betaalvereniging (NL); esos países se identifican por prefijo BIC.
 
 ## Excluidas
 

@@ -28,6 +28,12 @@ def make_root(tmp_path, scale_min=True):
         for s in reg["sources"]:
             if "min_records" in s:
                 s["min_records"] = 1
+    # Las pruebas mantienen BE como "pendiente de licencia" para cubrir ese estado
+    # (en producción BE se publica por aceptación de riesgo documentada).
+    for s in reg["sources"]:
+        if s["id"] == "schwifty_be":
+            s["publish"] = False
+            s.pop("risk_accepted", None)
     with open(root / "DATA_SOURCES_REGISTRY.yaml", "w", encoding="utf-8") as f:
         yaml.safe_dump(reg, f, allow_unicode=True, sort_keys=False)
     return root
@@ -301,3 +307,12 @@ def test_bde_cabecera_real_2026_y_categorias_variables():
     # categoría en otro formato (código sectorial): se aceptan las filas con código de supervisor de 4 dígitos
     raw2 = (hdr + "ES0049;;BANCO DE PRUEBA, S.A.;XYZ;Santander;S;;0049\nESX2;;FONDO;MMF;;S;;\n").encode("utf-8")
     assert [r["code"] for r in con.parse(raw2, None)] == ["0049"]
+
+
+def test_aceptacion_de_riesgo_solo_para_licencia_unknown(tmp_path):
+    from sepa_tools import sources
+    ok = {"id": "x", "license": "UNKNOWN", "publish": True, "risk_accepted": {"by": "COO", "date": "2026-10-29"}}
+    assert sources._risk_accepted(ok)
+    assert not sources._risk_accepted({**ok, "license": "RESTRICTED"})
+    assert not sources._risk_accepted({**ok, "license": "EXCLUDED"})
+    assert not sources._risk_accepted({**ok, "risk_accepted": {"by": "COO"}})   # sin fecha

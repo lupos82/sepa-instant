@@ -313,6 +313,18 @@ def page(lang, path, title, desc, body, alts, crumbs=None, schema=None, nav=None
     SITEMAP.append((path, alts))
 
 
+LIC_LABELS = {
+    "es": {"VERIFIED_PUBLIC_USE": "Uso público", "ATTRIBUTION_REQUIRED": "Reutilización con atribución",
+           "UNKNOWN": "Fuente oficial pública (citada)"},
+    "en": {"VERIFIED_PUBLIC_USE": "Public use", "ATTRIBUTION_REQUIRED": "Reuse with attribution",
+           "UNKNOWN": "Public official source (cited)"},
+}
+
+
+def lic_label(lic, lang):
+    return LIC_LABELS[lang].get(lic, lic)
+
+
 def faq_html(qas, lang):
     if not qas:
         return "", None
@@ -792,7 +804,7 @@ def build_sources():
             if sid == "epc_register":
                 continue
             rows.append(f'<tr><td><a href="{E(s.get("url", ""))}" rel="nofollow noopener">{E(s.get("institution", sid))}</a></td><td class="mono">{E(sid)}</td>'
-                        f'<td>{E(s.get("license", ""))}</td><td>{E(s.get("attribution", ""))}</td><td class="num">{E(fmt_date(s.get("effective_date", ""), lang))}</td></tr>')
+                        f'<td>{E(lic_label(s.get("license", ""), lang))}</td><td>{E(s.get("attribution", ""))}</td><td class="num">{E(fmt_date(s.get("effective_date", ""), lang))}</td></tr>')
         title = "Fuentes de datos y licencias | Cryptopocket" if es else "Data sources and licences | Cryptopocket"
         desc = ("Fuentes oficiales y abiertas que usan las herramientas bancarias de Cryptopocket, con sus licencias, atribuciones y fechas." if es else
                 "Official and open sources used by Cryptopocket's banking tools, with their licences, attributions and dates.")

@@ -1,7 +1,7 @@
 # Integración de SEPA Tools 2.0 en cryptopocket.io/tools
 
 Destinatario: quien mantiene el repositorio `web-cryptopocket.io` (generación estática, GitHub Actions, hosting en DonDominio).
-Objetivo: servir las herramientas y sus ~14.700 páginas SEO en `https://cryptopocket.io/tools/` **sin rediseñar ni sustituir la web corporativa**.
+Objetivo: servir las herramientas y sus ~35.500 páginas SEO en `https://cryptopocket.io/tools/` **sin rediseñar ni sustituir la web corporativa**.
 
 ## 1. Qué se integra
 
@@ -72,7 +72,7 @@ Opcional: `EXTRA_HEAD_FILE` / `EXTRA_BODY_END_FILE` apuntando a fragmentos HTML 
 
 ## 4. Despliegue en DonDominio
 
-- Primera subida: ~14.770 ficheros, ~215 MB. Siguientes: solo los cambiados (normalmente `data/v2/status.json` y las páginas cuyos datos cambien).
+- Primera subida: ~35.500 ficheros, ~520 MB. Siguientes: solo los cambiados (normalmente `data/v2/status.json` y las páginas cuyos datos cambien).
 - Usar un despliegue **incremental** con estado, por ejemplo `SamKirkland/FTP-Deploy-Action` (guarda `.ftp-deploy-sync-state.json` en el servidor) o `lftp mirror -R --only-newer --parallel=4` si se usa SFTP/FTPS.
 - Las credenciales FTP/SFTP deben estar en **GitHub Secrets** del repo de la web; nunca en el código ni en el frontend.
 - Si el despliegue actual borra todo y sube todo, cambiarlo a incremental antes de integrar `/tools` (o excluir `/tools/` de ese paso y desplegarlo con uno incremental propio).
