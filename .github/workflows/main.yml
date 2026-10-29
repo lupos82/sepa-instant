@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # fijado: ubuntu-latest migra a Ubuntu 26 desde oct-2026
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -39,18 +39,21 @@ jobs:
         run: |
           python tests/build_fixture_dataset.py
           node --test tests/js/engine_iban.test.js tests/js/engine_lookup.test.js
+      - name: Navegador para las pruebas de interfaz
+        if: github.event_name != 'schedule'
+        run: |
+          npm install --no-save playwright@1.48.2
+          npx playwright install --with-deps chromium || { echo "::error title=Navegador::no se pudo instalar Chromium para las pruebas"; exit 1; }
       - name: Pruebas de interfaz en navegador
         if: github.event_name != 'schedule'
         run: |
           SEPA_TOOLS_ROOT=$PWD/tests/.tmp/root OUT_DIR=$PWD/tests/.tmp/site python site/build_site.py
-          npm install --no-save playwright@1.48.2
-          npx playwright install --with-deps chromium
           node tests/e2e/site.e2e.js tests/.tmp/site tests/.tmp/shots
 
   sync:
     needs: test
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # fijado: ubuntu-latest migra a Ubuntu 26 desde oct-2026
     outputs:
       built: ${{ steps.built.outputs.built }}
     steps:
@@ -102,7 +105,7 @@ jobs:
     # Se publica aunque el paso de avisos falle: los avisos generan un correo, no bloquean la web.
     needs: sync
     if: ${{ !cancelled() && needs.sync.outputs.built == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # fijado: ubuntu-latest migra a Ubuntu 26 desde oct-2026
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -36,10 +36,20 @@ function esBban(bank, branch, account) {
 const results = [];
 async function check(name, fn) {
   try { await fn(); results.push({ name, ok: true }); console.log('ok   ', name); }
-  catch (e) { results.push({ name, ok: false, error: String(e).slice(0, 300) }); console.log('FAIL ', name, String(e).slice(0, 300)); }
+  catch (e) {
+    const msg = String(e).slice(0, 300);
+    results.push({ name, ok: false, error: msg });
+    console.log('FAIL ', name, msg);
+    if (process.env.GITHUB_ACTIONS) console.log(`::error title=e2e: ${name.replace(/[:,\n]/g, ' ')}::${msg.replace(/[\r\n]+/g, ' ')}`);
+  }
 }
 function assert(c, m) { if (!c) throw new Error(m); }
 
+process.on('unhandledRejection', (e) => {
+  console.log('FAIL  error no controlado', String(e).slice(0, 300));
+  if (process.env.GITHUB_ACTIONS) console.log('::error title=e2e::' + String(e).slice(0, 300).replace(/[\r\n]+/g, ' '));
+  process.exit(1);
+});
 (async () => {
   await new Promise((r) => server.listen(0, r));
   const base = `http://127.0.0.1:${server.address().port}`;
