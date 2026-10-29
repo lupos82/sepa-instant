@@ -44,6 +44,16 @@ async function check(name, fn) {
   }
 }
 function assert(c, m) { if (!c) throw new Error(m); }
+// Espera por sondeo con page.evaluate (no usa eval dentro de la página): page.waitForFunction
+// evalúa cadenas y la Content-Security-Policy de las páginas (script-src 'self') lo bloquea.
+async function waitFor(pg, fn, arg, timeout = 8000) {
+  const end = Date.now() + timeout;
+  for (;;) {
+    if (await pg.evaluate(fn, arg)) return;
+    if (Date.now() > end) throw new Error('timeout esperando la condición');
+    await new Promise((r) => setTimeout(r, 100));
+  }
+}
 
 process.on('unhandledRejection', (e) => {
   console.log('FAIL  error no controlado', String(e).slice(0, 300));
@@ -64,7 +74,7 @@ process.on('unhandledRejection', (e) => {
     await page.goto(base + url, { waitUntil: 'domcontentloaded' });
     await page.fill(sel, value);
     await page.press(sel, 'Enter');
-    await page.waitForFunction((s) => { const o = document.querySelector(s).closest('[data-tool]').querySelector('.out'); return o && o.innerText && !o.getAttribute('aria-busy'); }, sel, { timeout: 8000 });
+    await waitFor(page, (s) => { const o = document.querySelector(s).closest('[data-tool]').querySelector('.out'); return o && o.innerText && !o.getAttribute('aria-busy'); }, sel);
     return page.locator(sel).locator('xpath=ancestor::section[1]').locator('.out').innerText();
   }
 
@@ -93,7 +103,7 @@ process.on('unhandledRejection', (e) => {
     await page.selectOption('#c-code', 'DE');
     await page.fill('#q-code', '10010099');
     await page.press('#q-code', 'Enter');
-    await page.waitForFunction(() => /Prüfbank/.test(document.querySelector('[data-tool=code] .out').innerText), null, { timeout: 8000 });
+    await waitFor(page, () => /Prüfbank/.test(document.querySelector('[data-tool=code] .out').innerText));
     const t = await page.locator('[data-tool=code] .out').innerText();
     assert(/TSTCDEB1XXX/.test(t) && /confirmado/.test(t), t);
     await page.screenshot({ path: path.join(SHOTS, 'es-code.png'), fullPage: false });
@@ -136,7 +146,7 @@ process.on('unhandledRejection', (e) => {
     assert(await page.evaluate(() => document.activeElement.id === 'q-bic'), 'el foco no llegó al campo');
     await page.keyboard.type('TSTAESM1');
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => /Registered/.test(document.querySelector('[data-tool=bic] .out').innerText), null, { timeout: 8000 });
+    await waitFor(page, () => /Registered/.test(document.querySelector('[data-tool=bic] .out').innerText));
   });
   await check('Página de código estático (SEO): contenido en el HTML sin JS', async () => {
     const html = fs.readFileSync(path.join(SITE, 'tools/es/codigo-banco/espana/9901/index.html'), 'utf8');
