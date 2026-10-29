@@ -1,5 +1,31 @@
 [
  {
+  "data_version": "34eb8a88eab10c62",
+  "date": "2026-10-29",
+  "errors": [],
+  "sources": {
+   "bde_mfi_es": {
+    "diff": {
+     "added": 185,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "gleif_bic_lei": {
+    "diff": {
+     "added": 29980,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "gleif_lei_records": {
+    "status": "updated"
+   }
+  }
+ },
+ {
   "data_version": "79e92e2abfdaf68f",
   "date": "2026-10-29",
   "errors": [

@@ -1,5 +1,13 @@
 {
- "bde_mfi_es": {},
+ "bde_mfi_es": {
+  "effective_date": "2026-10-29",
+  "etag": "\"6ae26b8b-3b899\"",
+  "last_change": "2026-10-29",
+  "last_modified": "Wed, 28 Oct 2026 21:39:23 GMT",
+  "records": 185,
+  "sha256": "5308b8b5e51f95471cb49e2225c809ade9caf5ba5477c4a44e09db48c8ea4f9b",
+  "version": ""
+ },
  "bundesbank_blz": {
   "etag": "W/3a97fff9893732591adbbfcb70c1c4e8",
   "last_change": "2026-10-29",
@@ -62,10 +70,19 @@
   "sha256": "68a0239ca452670919d23a2f9771f0d202765eb0a25f1991128f710c18e0150b",
   "version": ""
  },
- "gleif_bic_lei": {},
+ "gleif_bic_lei": {
+  "effective_date": "2026-09-25",
+  "etag": "",
+  "last_change": "2026-10-29",
+  "last_modified": "",
+  "records": 29980,
+  "sha256": "0a6cd6299035b9dff225171d5ae4bff70f5f45f55a6f9ec4469f0de6c700b3c5",
+  "version": ""
+ },
  "gleif_lei_records": {
-  "effective_date": "",
-  "records": 0
+  "effective_date": "2026-10-29",
+  "last_change": "2026-10-29",
+  "records": 3312
  },
  "oenb_sepa_directory": {
   "effective_date": "2026-10-29",
