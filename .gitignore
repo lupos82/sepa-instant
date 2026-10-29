@@ -1,0 +1,13 @@
+status.json
+data/v2/status.json
+data/v2.tmp/
+data/v2.prev/
+state/last_run.json
+.cache/
+_site/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+tests/.tmp/
+tests/fixtures/iban_cases.json

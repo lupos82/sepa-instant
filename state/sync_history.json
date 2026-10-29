@@ -1,0 +1,145 @@
+[
+ {
+  "data_version": "d465fc6bcbf0cd4f",
+  "date": "2026-10-28",
+  "errors": [],
+  "sources": {
+   "schwifty_at": {
+    "diff": {
+     "added": 866,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_be": {
+    "diff": {
+     "added": 777,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_ch": {
+    "diff": {
+     "added": 1144,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_cz": {
+    "diff": {
+     "added": 47,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_de": {
+    "diff": {
+     "added": 4712,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_fi": {
+    "diff": {
+     "added": 643,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_hr": {
+    "diff": {
+     "added": 21,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_hu": {
+    "diff": {
+     "added": 179,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_li": {
+    "diff": {
+     "added": 20,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_lt": {
+    "diff": {
+     "added": 288,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_lv": {
+    "diff": {
+     "added": 25,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_nl": {
+    "diff": {
+     "added": 86,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_no": {
+    "diff": {
+     "added": 2297,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_pl": {
+    "diff": {
+     "added": 3145,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_se": {
+    "diff": {
+     "added": 36,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_si": {
+    "diff": {
+     "added": 894,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "schwifty_sk": {
+    "diff": {
+     "added": 41,
+     "modified": 0,
+     "removed": 0
+    },
+    "status": "updated"
+   }
+  }
+ }
+]

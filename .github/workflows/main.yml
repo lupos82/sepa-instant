@@ -1,11 +1,12 @@
-name: Sincronizar EPC y publicar
+name: SEPA Tools — comprobar fuentes, probar y publicar
 
 on:
   schedule:
-    - cron: "17 5 * * *"
+    - cron: "17 5 * * *"        # comprobación diaria; GitHub puede retrasarla
   workflow_dispatch: {}
   push:
     branches: [main]
+  pull_request:                  # en PR solo se ejecutan las pruebas (sin publicar)
 
 permissions:
   contents: write
@@ -13,52 +14,98 @@ permissions:
   id-token: write
 
 concurrency:
-  group: sync-and-deploy
+  group: sepa-tools-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  sync:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-24.04   # fijado: ubuntu-latest migra a Ubuntu 26 desde oct-2026
     steps:
       - uses: actions/checkout@v4
-
-      - name: Descomprimir el ZIP subido
-        run: for z in *.zip; do [ -f "$z" ] && unzip -n -j "$z"; done; ls -la
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Dependencias (versiones fijadas)
+        run: pip install -r requirements-dev.txt
+      - name: Vulnerabilidades conocidas en dependencias
+        run: pip-audit -r requirements.txt
+      - name: Pruebas Python (conectores, fusión, sincronización)
+        run: python tests/make_iban_cases.py && python -m pytest -q
+      - name: Pruebas del motor JavaScript (41 países SEPA contra schwifty)
+        run: |
+          python tests/build_fixture_dataset.py
+          node --test tests/js/engine_iban.test.js tests/js/engine_lookup.test.js
+      - name: Navegador para las pruebas de interfaz
+        if: github.event_name != 'schedule'
+        run: |
+          npm install --no-save playwright@1.48.2
+          npx playwright install --with-deps chromium || { echo "::error title=Navegador::no se pudo instalar Chromium para las pruebas"; exit 1; }
+      - name: Pruebas de interfaz en navegador
+        if: github.event_name != 'schedule'
+        run: |
+          SEPA_TOOLS_ROOT=$PWD/tests/.tmp/root OUT_DIR=$PWD/tests/.tmp/site python site/build_site.py
+          node tests/e2e/site.e2e.js tests/.tmp/site tests/.tmp/shots
 
-      - name: Descargar y validar el registro del EPC
-        continue-on-error: ${{ github.event_name == 'push' }}
-        run: python sync_epc.py
+  sync:
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04   # fijado: ubuntu-latest migra a Ubuntu 26 desde oct-2026
+    outputs:
+      built: ${{ steps.built.outputs.built }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
 
-      - name: Guardar los cambios en el repositorio
+      - name: Comprobar fuentes y actualizar datos
+        run: python -m sepa_tools sync
+
+      - name: Guardar cambios (solo si los datos han cambiado)
         run: |
           git config user.name "epc-sync-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add participants.json changes.json
+          git add data/v2 state participants.json changes.json docs/SEPA_41_COUNTRIES_COVERAGE.md
           if git diff --cached --quiet; then
-            echo "Sin cambios en el registro."
+            echo "Sin cambios en los datos."
           else
-            git commit -m "Registro EPC actualizado $(date -u +%Y-%m-%d)"
+            git commit -m "Datos SEPA Tools actualizados $(date -u +%Y-%m-%d)"
             git push
           fi
 
-      - name: Preparar la web
+      - name: Construir la web
         run: |
           mkdir -p _site
           cp index.html participants.json changes.json _site/
           cp status.json _site/ 2>/dev/null || true
+          # Copia de previsualización en GitHub Pages (sepa.cryptopocket.io/tools): noindex hasta que la
+          # web corporativa la integre en cryptopocket.io/tools (ver integration/INTEGRATION_WEB_CRYPTOPOCKET.md).
+          NOINDEX=1 OUT_DIR=$PWD/_site python site/build_site.py
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+      - id: built
+        run: echo "built=true" >> "$GITHUB_OUTPUT"
+
+      - name: Avisar si alguna fuente falló o un control no se cumple
+        if: always()
+        run: |
+          python -m sepa_tools check-run
+          python -m sepa_tools selftest
 
   deploy:
+    # Se publica aunque el paso de avisos falle: los avisos generan un correo, no bloquean la web.
     needs: sync
-    runs-on: ubuntu-latest
+    if: ${{ !cancelled() && needs.sync.outputs.built == 'true' }}
+    runs-on: ubuntu-24.04   # fijado: ubuntu-latest migra a Ubuntu 26 desde oct-2026
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

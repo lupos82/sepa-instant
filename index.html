@@ -369,7 +369,7 @@ Promise.all([
   DB.forEach(function(p){BYBIC.set(p.bic,p);(BYCOUNTRY[p.country]=BYCOUNTRY[p.country]||[]).push(p)});
   Object.keys(BYCOUNTRY).forEach(function(c){BYCOUNTRY[c].sort(function(a,b){return a.name.localeCompare(b.name)})});
   out.innerHTML='';stats();
-  var pre=PARAMS.get('q');if(pre){q.value=pre;search()}
+  var pre=PARAMS.get('q');if(pre&&!/^[A-Z]{2}\d{2}[A-Z0-9]{8,}$/.test(pre.toUpperCase().replace(/[\s-]/g,''))){q.value=pre.slice(0,40);search()} /* privacidad: nunca IBAN desde la URL */
 }).catch(function(){out.innerHTML='<div class="result bad"><div class="ic">✕</div><div><h3>'+esc(t('err'))+'</h3></div></div>'});
 })();
 </script>

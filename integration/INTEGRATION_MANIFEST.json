@@ -1,0 +1,95 @@
+{
+  "name": "sepa-tools",
+  "version": "2.0.0",
+  "data_schema": 2,
+  "source_repository": "https://github.com/lupos82/sepa-instant",
+  "source_ref": "main",
+  "target_site": "https://cryptopocket.io",
+  "mount_path": "/tools/",
+  "ownership": "El generador es propietario exclusivo de /tools/: lo borra y regenera completo en cada construcción.",
+  "build": {
+    "runtime": "python>=3.11 (solo biblioteca estándar)",
+    "command": "python site/build_site.py",
+    "working_directory": "<raíz del checkout de sepa-instant>",
+    "env": {
+      "PUBLIC_BASE": {"required": true, "value": "https://cryptopocket.io", "description": "Origen para canonical, hreflang, og:url y sitemaps"},
+      "CONTACT_URL": {"required": true, "value": "https://cryptopocket.io/contact", "description": "Destino de los botones de contacto (confirmar URL real)"},
+      "OUT_DIR": {"required": true, "description": "Carpeta de salida de la web; se escribe OUT_DIR/tools/"},
+      "NOINDEX": {"required": false, "value": "", "description": "1 solo en copias de previsualización"},
+      "EXTRA_HEAD_FILE": {"required": false, "description": "Fragmento HTML insertado al final de <head>"},
+      "EXTRA_BODY_END_FILE": {"required": false, "description": "Fragmento HTML insertado al final de <body>"},
+      "SEPA_TOOLS_ROOT": {"required": false, "description": "Raíz alternativa de datos (pruebas)"}
+    },
+    "post_build": ["cp integration/tools.htaccess $OUT_DIR/tools/.htaccess"],
+    "deterministic": true,
+    "approx_output": {"files": 14770, "megabytes": 215}
+  },
+  "schedule": {
+    "upstream_data_sync_utc": "05:17 diario (GitHub puede retrasarlo)",
+    "recommended_site_build_utc": "06:10 diario + en cada despliegue de la web"
+  },
+  "outputs": {
+    "pages": [
+      {"type": "hub", "es": "/tools/es/", "en": "/tools/en/"},
+      {"type": "identify_by_iban", "es": "/tools/es/identificar-banco-iban/", "en": "/tools/en/iban-bank-lookup/"},
+      {"type": "iban_validator", "es": "/tools/es/validar-iban/", "en": "/tools/en/iban-checker/", "children": "/{país}/ (43)"},
+      {"type": "bank_code", "es": "/tools/es/codigo-banco/", "en": "/tools/en/bank-code-lookup/", "children": "/{país}/, /{país}/{N}/ (índices de 500) y /{país}/{código}/ (solo directorios oficiales publicados)"},
+      {"type": "bic_lookup", "es": "/tools/es/buscar-bic/", "en": "/tools/en/bic-lookup/"},
+      {"type": "sepa_instant", "es": "/tools/es/sepa-instant/", "en": "/tools/en/sepa-instant/", "children": "/{país}/ (42)"},
+      {"type": "bank_profile", "es": "/tools/es/banco/{bic11}/", "en": "/tools/en/bank/{bic11}/", "children": "un BIC inscrito en el EPC por página"},
+      {"type": "guides", "es": "/tools/es/guias/", "en": "/tools/en/guides/", "children": 6},
+      {"type": "sources_and_licences", "es": "/tools/es/fuentes-y-licencias/", "en": "/tools/en/sources-and-licences/"},
+      {"type": "language_root", "path": "/tools/index.html"},
+      {"type": "not_found", "path": "/tools/404.html"}
+    ],
+    "sitemaps": {"index": "/tools/sitemap.xml", "children": "/tools/sitemap-N.xml", "urls_per_file": 10000},
+    "assets": ["/tools/assets/site.css", "/tools/assets/site.js", "/tools/assets/sepa-engine.js", "/tools/assets/root.js", "/tools/assets/root.css"],
+    "data": {
+      "base": "/tools/data/v2/",
+      "files": ["iban-specs.json", "banks/{PREFIJO}.json", "sepa.json", "bic8.json", "names.json", "coverage.json", "changes.json", "meta.json", "status.json"],
+      "volatile": ["status.json"],
+      "public": true,
+      "contains_personal_data": false
+    }
+  },
+  "engine": {
+    "file": "/tools/assets/sepa-engine.js",
+    "global": "SepaEngine",
+    "factory": "SepaEngine.create({ baseUrl: '/tools/data/v2/' })",
+    "contract": "docs/API_CONTRACT.md"
+  },
+  "seo": {
+    "languages": ["es", "en"],
+    "x_default": "en",
+    "canonical": "PUBLIC_BASE + ruta con barra final",
+    "structured_data": ["WebApplication", "FAQPage", "BreadcrumbList", "Article", "BankOrCreditUnion"],
+    "robots_txt_line": "Sitemap: https://cryptopocket.io/tools/sitemap.xml",
+    "preview_copy": {"url": "https://sepa.cryptopocket.io/tools/", "robots": "noindex,follow"}
+  },
+  "privacy": {
+    "iban_processing": "solo en el navegador",
+    "iban_in_urls": false,
+    "iban_stored": false,
+    "iban_sent_to_analytics": false,
+    "masked_input_attributes": ["data-private", "data-hj-suppress", "data-clarity-mask", "ph-no-capture"],
+    "forbidden_on_tools": ["grabación de sesiones", "mapas de calor con texto", "captura de formularios", "formularios GET con IBAN"]
+  },
+  "server": {
+    "htaccess": "integration/tools.htaccess",
+    "content_security_policy": "ver tools.htaccess; ampliar solo si se inyectan scripts de terceros",
+    "cache": {"html": "max-age=0, must-revalidate", "css_js": "1 año (versionados por hash)", "json": "1 hora"}
+  },
+  "deployment": {
+    "host": "DonDominio (Apache)",
+    "strategy": "incremental (solo ficheros cambiados)",
+    "credentials": "GitHub Secrets del repo de la web; nunca en código ni frontend"
+  },
+  "acceptance_checks": "integration/INTEGRATION_WEB_CRYPTOPOCKET.md §7",
+  "constraints": [
+    "No rediseñar ni sustituir la web corporativa",
+    "No editar los HTML generados (se sobrescriben); cambios visuales por PR en sepa-instant",
+    "No alterar avisos, fuentes ni atribuciones",
+    "No publicar otros datos bancarios",
+    "No fusionar a producción sin revisión"
+  ]
+}

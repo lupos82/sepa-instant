@@ -1,0 +1,165 @@
+{
+ "bde_mfi_es": {},
+ "bundesbank_blz": {},
+ "cnb_bank_codes": {},
+ "ecb_mfi": {},
+ "epc_sct": {},
+ "epc_sct_inst": {},
+ "epc_sdd_b2b": {},
+ "epc_sdd_core": {},
+ "gleif_bic_lei": {},
+ "oenb_sepa_directory": {},
+ "schwifty_at": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 866,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_be": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 777,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_ch": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 1144,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_cz": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 47,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_de": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 4805,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_fi": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 653,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_hr": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 21,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_hu": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 179,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_li": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 20,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_lt": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 288,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_lv": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 25,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_nl": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 86,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_no": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 2297,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_pl": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 3145,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_se": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 36,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_si": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 895,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ },
+ "schwifty_sk": {
+  "effective_date": "schwifty 2026.10.1",
+  "etag": "",
+  "last_change": "2026-10-28",
+  "last_modified": "",
+  "records": 41,
+  "sha256": "",
+  "version": "schwifty 2026.10.1"
+ }
+}
