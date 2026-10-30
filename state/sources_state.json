@@ -26,12 +26,12 @@
   "version": ""
  },
  "ecb_mfi": {
-  "effective_date": "2026-10-28",
+  "effective_date": "2026-10-29",
   "etag": "",
-  "last_change": "2026-10-29",
-  "last_modified": "Wed, 28 Oct 2026 16:06:28 GMT",
+  "last_change": "2026-10-30",
+  "last_modified": "Thu, 29 Oct 2026 16:06:23 GMT",
   "records": 4634,
-  "sha256": "b1e3d79ba5e008bdff4adbda25126e27dd7f7f475adb16eb9a4e73e60f5bad06",
+  "sha256": "abcdfd27230213f2d4c8d2cd0458b4c316a5bcf9d32d35e681f5b647c3f31499",
   "version": ""
  },
  "epc_sct": {
@@ -71,26 +71,26 @@
   "version": ""
  },
  "gleif_bic_lei": {
-  "effective_date": "2026-09-25",
+  "effective_date": "2026-10-30",
   "etag": "",
-  "last_change": "2026-10-29",
+  "last_change": "2026-10-30",
   "last_modified": "",
-  "records": 29980,
-  "sha256": "0a6cd6299035b9dff225171d5ae4bff70f5f45f55a6f9ec4469f0de6c700b3c5",
+  "records": 30004,
+  "sha256": "6fbbeccf9f95927d98bf2615fb4ff99ac4fa6a51f17ff49d8ae5823372b8e8f6",
   "version": ""
  },
  "gleif_lei_records": {
-  "effective_date": "2026-10-29",
-  "last_change": "2026-10-29",
-  "records": 3312
+  "effective_date": "2026-10-30",
+  "last_change": "2026-10-30",
+  "records": 3351
  },
  "oenb_sepa_directory": {
-  "effective_date": "2026-10-29",
+  "effective_date": "2026-10-30",
   "etag": "",
   "last_change": "2026-10-29",
   "last_modified": "",
   "records": 874,
-  "sha256": "798915f0f983e65639cc7df352f27fd4ebe4ebe13abdd9d3dbc1687686bb91e1",
+  "sha256": "03db0cacac56b41f5b03a4e2506ad8fdb7085bf55d7c45717af24add83b0a087",
   "version": ""
  },
  "schwifty_at": {
