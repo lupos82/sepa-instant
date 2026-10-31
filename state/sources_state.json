@@ -26,12 +26,12 @@
   "version": ""
  },
  "ecb_mfi": {
-  "effective_date": "2026-10-29",
+  "effective_date": "2026-10-30",
   "etag": "",
-  "last_change": "2026-10-30",
-  "last_modified": "Thu, 29 Oct 2026 16:06:23 GMT",
+  "last_change": "2026-10-31",
+  "last_modified": "Fri, 30 Oct 2026 16:06:10 GMT",
   "records": 4634,
-  "sha256": "abcdfd27230213f2d4c8d2cd0458b4c316a5bcf9d32d35e681f5b647c3f31499",
+  "sha256": "7cb99334db9b90771526e68dbc955dfdabd989c8c51aa0ec3e7a9ba415dd3e24",
   "version": ""
  },
  "epc_sct": {

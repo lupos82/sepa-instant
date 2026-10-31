@@ -1,6 +1,6 @@
 # Cobertura SEPA — 41 países
 
-Generado automáticamente a partir de los datos procesados (2026-10-30). No se estima nada: cada cifra sale de `data/v2`.
+Generado automáticamente a partir de los datos procesados (2026-10-31). No se estima nada: cada cifra sale de `data/v2`.
 
 - Países con validación estructural de IBAN: **42** (41 países SEPA + Gibraltar).
 - Países con directorio bancario publicado: **28**.
@@ -25,9 +25,9 @@ Generado automáticamente a partir de los datos procesados (2026-10-30). No se e
 | España (ES) | 24 | 1–4 (oficina 5–8) | es_ccc | Publicado | bde_mfi_es | 185 | 0 | 109 | 2026-10-29 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 117 |
 | Estonia (EE) | 20 | 1–2 (oficina 3–4) | ee_731 | Sin fuente abierta verificada | — | — | — | — | — | — | — | 11 |
 | Finlandia (FI) | 18 | 1–3 | fi_luhn | Publicado | schwifty_fi | 643 | 643 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 14 |
-| Francia (FR) | 27 | 1–5 (oficina 6–10) | fr_rib | Publicado | ecb_mfi | 377 | 0 | 243 | 2026-10-29 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 248 |
+| Francia (FR) | 27 | 1–5 (oficina 6–10) | fr_rib | Publicado | ecb_mfi | 377 | 0 | 243 | 2026-10-30 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 248 |
 | Gibraltar (GI) | 23 | 1–4 | — | Publicado | epc+gleif | 15 | 0 | 15 | — | ATTRIBUTION_REQUIRED | Cobertura no cuantificable | 4 |
-| Grecia (GR) | 27 | 1–3 (oficina 4–7) | — | Publicado | ecb_mfi | 36 | 0 | 14 | 2026-10-29 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 23 |
+| Grecia (GR) | 27 | 1–3 (oficina 4–7) | — | Publicado | ecb_mfi | 36 | 0 | 14 | 2026-10-30 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 23 |
 | Hungría (HU) | 28 | 1–3 (oficina 4–7) | — | Publicado | schwifty_hu | 179 | 179 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 20 |
 | Irlanda (IE) | 22 | 1–4 (oficina 5–10) | — | Publicado | epc+gleif | 420 | 0 | 420 | — | ATTRIBUTION_REQUIRED | Cobertura no cuantificable | 175 |
 | Islandia (IS) | 26 | 1–2 (oficina 3–4) | — | Sin fuente abierta verificada | — | — | — | — | — | — | — | 6 |
@@ -35,12 +35,12 @@ Generado automáticamente a partir de los datos procesados (2026-10-30). No se e
 | Letonia (LV) | 21 | 1–4 | — | Publicado | epc+gleif | 35 | 0 | 35 | — | ATTRIBUTION_REQUIRED | Cobertura no cuantificable | 19 |
 | Liechtenstein (LI) | 21 | 1–5 | — | Publicado | schwifty_li | 20 | 19 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 10 |
 | Lituania (LT) | 20 | 1–5 | — | Publicado | schwifty_lt | 287 | 287 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 82 |
-| Luxemburgo (LU) | 20 | 1–3 | — | Publicado | ecb_mfi | 119 | 0 | 81 | 2026-10-29 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 63 |
+| Luxemburgo (LU) | 20 | 1–3 | — | Publicado | ecb_mfi | 119 | 0 | 81 | 2026-10-30 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 63 |
 | Macedonia del Norte (MK) | 19 | 1–3 | iso7064_97_10 | Sin fuente abierta verificada | — | — | — | — | — | — | — | 14 |
 | Malta (MT) | 31 | 1–4 (oficina 5–9) | — | Publicado | epc+gleif | 85 | 0 | 85 | — | ATTRIBUTION_REQUIRED | Cobertura no cuantificable | 40 |
 | Moldavia (MD) | 24 | 1–2 | — | Sin fuente abierta verificada | — | — | — | — | — | — | — | 9 |
 | Montenegro (ME) | 22 | 1–3 | iso7064_97_10 | Sin fuente abierta verificada | — | — | — | — | — | — | — | 12 |
-| Mónaco (MC) | 27 | 1–5 (oficina 6–10) | fr_rib | Publicado | ecb_mfi | 377 | 0 | 259 | 2026-10-29 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 14 |
+| Mónaco (MC) | 27 | 1–5 (oficina 6–10) | fr_rib | Publicado | ecb_mfi | 377 | 0 | 259 | 2026-10-30 | ATTRIBUTION_REQUIRED | Parcial: solo entidades de crédito y banco central | 14 |
 | Noruega (NO) | 15 | 1–4 | no_mod11 | Publicado | schwifty_no | 2297 | 2297 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 82 |
 | Países Bajos (NL) | 18 | 1–4 | — | Publicado | epc+gleif | 365 | 0 | 365 | — | ATTRIBUTION_REQUIRED | Cobertura no cuantificable | 44 |
 | Polonia (PL) | 28 | 1–8 | pl_weighted | Publicado | schwifty_pl | 3145 | 2988 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 25 |
