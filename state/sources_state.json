@@ -85,12 +85,12 @@
   "records": 3351
  },
  "oenb_sepa_directory": {
-  "effective_date": "2026-10-30",
+  "effective_date": "2026-11-02",
   "etag": "",
   "last_change": "2026-10-29",
   "last_modified": "",
   "records": 874,
-  "sha256": "03db0cacac56b41f5b03a4e2506ad8fdb7085bf55d7c45717af24add83b0a087",
+  "sha256": "5a558f8af9c7b6f4dc12d05c01dc0938ee5e4a9beca496c19ee72bcf7830392f",
   "version": ""
  },
  "schwifty_at": {
