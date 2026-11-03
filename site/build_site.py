@@ -819,12 +819,16 @@ SITEMAP_CHUNK = 10000  # límite del protocolo: 50.000 URL / 50 MB por fichero
 
 
 def write_sitemap():
-    """/tools/sitemap.xml es un índice de sitemaps (sitemap-1.xml, sitemap-2.xml…), apto para crecer."""
+    """Index and localized URLs; omit unverified per-page lastmod timestamps.
+
+    A global source change does not mean all 35k HTML pages changed.
+    Google expects per-URL lastmod only for real significant content updates.
+    """
     names = []
     for i in range(0, len(SITEMAP), SITEMAP_CHUNK):
         lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
         for path, alts in SITEMAP[i:i + SITEMAP_CHUNK]:
-            lines.append(f"<url><loc>{PUBLIC_BASE}{E(path)}</loc><lastmod>{UPDATED}</lastmod>"
+            lines.append(f"<url><loc>{PUBLIC_BASE}{E(path)}</loc>"
                          + "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{PUBLIC_BASE}{E(p)}"/>' for l, p in alts.items()) + "</url>")
         lines.append("</urlset>")
         name = f"sitemap-{i // SITEMAP_CHUNK + 1}.xml"
@@ -832,7 +836,7 @@ def write_sitemap():
         with open(os.path.join(OUT, "tools", name), "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
     idx = ['<?xml version="1.0" encoding="UTF-8"?>', '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    idx += [f"<sitemap><loc>{PUBLIC_BASE}{PREFIX}/{n}</loc><lastmod>{UPDATED}</lastmod></sitemap>" for n in names]
+    idx += [f"<sitemap><loc>{PUBLIC_BASE}{PREFIX}/{n}</loc></sitemap>" for n in names]
     idx.append("</sitemapindex>")
     with open(os.path.join(OUT, "tools", "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write("\n".join(idx))
