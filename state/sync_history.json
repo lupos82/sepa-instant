@@ -1,5 +1,20 @@
 [
  {
+  "data_version": "7772cbdce224b83e",
+  "date": "2026-11-04",
+  "errors": [],
+  "sources": {
+   "ecb_mfi": {
+    "diff": {
+     "added": 1,
+     "modified": 0,
+     "removed": 2
+    },
+    "status": "updated"
+   }
+  }
+ },
+ {
   "data_version": "f778d21feddc0b6e",
   "date": "2026-11-03",
   "errors": [],
