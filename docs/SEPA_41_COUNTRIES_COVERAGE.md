@@ -1,6 +1,6 @@
 # Cobertura SEPA — 41 países
 
-Generado automáticamente a partir de los datos procesados (2026-11-07). No se estima nada: cada cifra sale de `data/v2`.
+Generado automáticamente a partir de los datos procesados (2026-11-08). No se estima nada: cada cifra sale de `data/v2`.
 
 - Países con validación estructural de IBAN: **42** (41 países SEPA + Gibraltar).
 - Países con directorio bancario publicado: **28**.
