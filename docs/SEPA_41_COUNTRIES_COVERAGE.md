@@ -1,6 +1,6 @@
 # Cobertura SEPA — 41 países
 
-Generado automáticamente a partir de los datos procesados (2026-11-08). No se estima nada: cada cifra sale de `data/v2`.
+Generado automáticamente a partir de los datos procesados (2026-11-09). No se estima nada: cada cifra sale de `data/v2`.
 
 - Países con validación estructural de IBAN: **42** (41 países SEPA + Gibraltar).
 - Países con directorio bancario publicado: **28**.
@@ -13,7 +13,7 @@ Generado automáticamente a partir de los datos procesados (2026-11-08). No se e
 | Albania (AL) | 28 | 1–3 (oficina 4–7) | — | Sin fuente abierta verificada | — | — | — | — | — | — | — | 13 |
 | Alemania (DE) | 22 | 1–8 | — | Publicado | bundesbank_blz | 3507 | 3505 | 0 | — | ATTRIBUTION_REQUIRED | Completa respecto al directorio oficial | 1151 |
 | Andorra (AD) | 24 | 1–4 (oficina 5–8) | — | Sin fuente abierta verificada | — | — | — | — | — | — | — | 3 |
-| Austria (AT) | 20 | 1–5 | — | Publicado | oenb_sepa_directory | 874 | 868 | 0 | 2026-11-06 | ATTRIBUTION_REQUIRED | Completa respecto al directorio oficial | 380 |
+| Austria (AT) | 20 | 1–5 | — | Publicado | oenb_sepa_directory | 874 | 868 | 0 | 2026-11-09 | ATTRIBUTION_REQUIRED | Completa respecto al directorio oficial | 380 |
 | Bulgaria (BG) | 22 | 1–4 (oficina 5–8) | — | Publicado | epc+gleif | 109 | 0 | 109 | — | ATTRIBUTION_REQUIRED | Cobertura no cuantificable | 31 |
 | Bélgica (BE) | 16 | 1–3 | be_mod97 | Publicado | schwifty_be | 777 | 771 | 0 | schwifty 2026.10.1 | UNKNOWN | Cobertura no cuantificable | 37 |
 | Chipre (CY) | 28 | 1–3 (oficina 4–8) | — | Sin fuente abierta verificada | — | — | — | — | — | — | — | 30 |
