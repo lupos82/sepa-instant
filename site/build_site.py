@@ -59,8 +59,11 @@ CATALOG = {}
 for f in sorted(os.listdir(os.path.join(DATA, "banks"))) if os.path.isdir(os.path.join(DATA, "banks")) else []:
     CATALOG[f[:-5]] = jload(f"banks/{f}")
 TODAY = date.today().isoformat()
-# Fecha del último cambio real de datos (no la hora de comprobación, que cambia cada día).
-_DATES = [(v.get(k) or "")[:10] for v in (META.get("sources") or {}).values() for k in ("last_change", "effective_date")]
+# Global content date is derived only from material source changes.
+# The source's observed effective_date may advance during an unchanged
+# daily fetch, so it must never automatically redate every HTML page and
+# sitemap. Source-specific observation dates remain available in meta.json.
+_DATES = [(v.get("last_change") or "")[:10] for v in (META.get("sources") or {}).values()]
 UPDATED = max([d for d in _DATES if re.match(r"\d{4}-\d{2}-\d{2}$", d)] or [TODAY])
 # NOINDEX=1: copia de previsualización (p. ej. sepa.cryptopocket.io/tools) que no debe competir con la web corporativa.
 ROBOTS = '<meta name="robots" content="noindex,follow">' if os.environ.get("NOINDEX") == "1" else ""
