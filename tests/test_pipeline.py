@@ -322,3 +322,23 @@ def test_aceptacion_de_riesgo_solo_para_licencia_unknown(tmp_path):
     assert not sources._risk_accepted({**ok, "license": "RESTRICTED"})
     assert not sources._risk_accepted({**ok, "license": "EXCLUDED"})
     assert not sources._risk_accepted({**ok, "risk_accepted": {"by": "COO"}})   # sin fecha
+
+
+def test_source_date_observation_does_not_change_published_bank_content_date():
+    from sepa_tools.sync import _record_source_effective_dates
+
+    at = {"effective_date": "2026-11-03", "content_effective_date": "2026-11-03"}
+    _record_source_effective_dates(at, "2026-11-10", False)
+    assert at["effective_date"] == "2026-11-10"  # still auditable
+    assert at["content_effective_date"] == "2026-11-03"  # 874 unchanged codes
+    _record_source_effective_dates(at, "2026-11-11", False)
+    assert at["content_effective_date"] == "2026-11-03"
+    _record_source_effective_dates(at, "2026-11-12", True)
+    assert at["effective_date"] == "2026-11-12"
+    assert at["content_effective_date"] == "2026-11-12"
+
+    # Transition for sources that have not recorded a display date yet.
+    other = {"effective_date": "2026-11-09"}
+    _record_source_effective_dates(other, "2026-11-10", False)
+    assert other["effective_date"] == "2026-11-10"
+    assert other["content_effective_date"] == "2026-11-09"

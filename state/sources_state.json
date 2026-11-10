@@ -85,6 +85,7 @@
   "records": 3351
  },
  "oenb_sepa_directory": {
+  "content_effective_date": "2026-11-03",
   "effective_date": "2026-11-10",
   "etag": "",
   "last_change": "2026-10-29",

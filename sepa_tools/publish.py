@@ -76,7 +76,8 @@ def publish(dataset: dict, state: dict, coverage: dict, changes_log: list) -> di
         st = state.get(src, {}) if src in state else {}
         _write(tmp, f"banks/{prefix}.json", {
             "country": prefix, "relation": d["relation"], "source": src,
-            "effective_date": st.get("effective_date", ""), "attribution": d.get("attribution", ""),
+            "effective_date": st.get("content_effective_date") or st.get("effective_date", ""),
+            "attribution": d.get("attribution", ""),
             "code_type": d["code_type"], "codes": d["codes"]})
     _write(tmp, "sepa.json", dataset["sepa"])
     _write(tmp, "bic8.json", dataset["bic8"])
