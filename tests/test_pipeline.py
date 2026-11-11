@@ -394,3 +394,60 @@ def test_date_only_source_observation_does_not_redate_sitemaps_or_bank_html(base
     second = render(tmp_path / "render-after")
     assert first.keys() == second.keys()
     assert first == second, "Date-only source observation changed bank HTML or sitemap"
+
+
+def test_published_bank_date_unchanged_detail_pages_are_byte_identical(base, tmp_path):
+    """Full generator: a one-code BIC update must not redate every AT code page.
+
+    Baseline is deliberately synthesized; NO public site or FTPS is contacted.
+    The separate WEB audit authenticates actual baseline bytes against FTPS.
+    """
+    root, _, _ = base
+    from pathlib import Path
+    bank_path = Path(root) / "data/v2/banks/AT.json"
+    bank = json.loads(bank_path.read_text(encoding="utf-8"))
+    # Ensure the fixture contains both an edited and an untouched bank record.
+    unchanged_code = "99901"
+    changed_code = "99902"
+    assert unchanged_code in bank["codes"]
+    bank["codes"][changed_code] = {**bank["codes"][unchanged_code],
+                                  "n": "Synthetic second Austrian bank",
+                                  "b": ["TSTZATW1XXX"]}
+    bank["effective_date"] = "2026-10-28"
+    bank_path.write_text(json.dumps(bank), encoding="utf-8")
+    previous = tmp_path / "last-published"
+    previous.mkdir()
+    (previous / "AT.json").write_text(json.dumps(bank), encoding="utf-8")
+
+    def render(path, baseline=None):
+        env = dict(os.environ, SEPA_TOOLS_ROOT=str(root),
+                   OUT_DIR=str(path), PUBLIC_BASE="https://cryptopocket.io",
+                   CONTACT_URL="https://cryptopocket.io/contact", NOINDEX="1")
+        env.pop("SEPA_PUBLISHED_BANKS_DIR", None)
+        if baseline:
+            env["SEPA_PUBLISHED_BANKS_DIR"] = str(baseline)
+        result = subprocess.run([sys.executable, "site/build_site.py"],
+                                cwd=REPO, env=env, capture_output=True,
+                                text=True, timeout=120)
+        assert result.returncode == 0, result.stderr[-3000:]
+        return path / "tools"
+
+    before = render(tmp_path / "before")
+    current = json.loads(bank_path.read_text(encoding="utf-8"))
+    current["effective_date"] = "2026-11-11"
+    current["codes"][changed_code]["b"] = ["TSTZATW1ABC"]
+    bank_path.write_text(json.dumps(current), encoding="utf-8")
+    after = render(tmp_path / "after", previous)
+
+    for lang in ("es", "en"):
+        old = list((before / lang).rglob(unchanged_code + "/index.html"))
+        new = list((after / lang).rglob(unchanged_code + "/index.html"))
+        assert len(old) == len(new) == 1
+        assert old[0].read_bytes() == new[0].read_bytes(), (
+            lang + ": directory date alone rewrote an unchanged bank-code page")
+        changed = list((after / lang).rglob(changed_code + "/index.html"))
+        prior = list((before / lang).rglob(changed_code + "/index.html"))
+        assert len(changed) == len(prior) == 1
+        assert changed[0].read_bytes() != prior[0].read_bytes()
+        assert b"TSTZATW1ABC" in changed[0].read_bytes()
+        assert b"TSTZATW1XXX" in new[0].read_bytes() or b"TST" in new[0].read_bytes()
