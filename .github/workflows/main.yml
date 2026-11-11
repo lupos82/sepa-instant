@@ -15,7 +15,9 @@ permissions:
 
 concurrency:
   group: sepa-tools-${{ github.ref }}
-  cancel-in-progress: false
+  # The published main sync/Pages deploy is never interrupted. PR-only runs
+  # supersede obsolete test commits, avoiding an hours-long queue of changes.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
