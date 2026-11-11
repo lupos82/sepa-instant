@@ -17,7 +17,9 @@ import re
 import shutil
 import sys
 import unicodedata
+from pathlib import Path
 from datetime import date, datetime, timezone
+from bank_page_materiality import load_published_catalog, date_for_code
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -58,6 +60,25 @@ STATUS = jload("status.json", {}) or {}
 CATALOG = {}
 for f in sorted(os.listdir(os.path.join(DATA, "banks"))) if os.path.isdir(os.path.join(DATA, "banks")) else []:
     CATALOG[f[:-5]] = jload(f"banks/{f}")
+
+# When reviewing an incremental release, retain actual published dates on
+# unchanged bank-code details. Their bank DATA always comes from the current
+# official source. The audit separately verifies baseline hashes against FTPS.
+PUBLISHED_BANKS = {}
+_baseline_root = os.environ.get("SEPA_PUBLISHED_BANKS_DIR", "")
+if _baseline_root:
+    _root = Path(_baseline_root)
+    if not _root.is_absolute() or _root.is_symlink() or not _root.is_dir():
+        sys.exit("ERROR: SEPA_PUBLISHED_BANKS_DIR must be an absolute directory")
+    for _item in _root.iterdir():
+        _country = _item.stem
+        if (_item.suffix != ".json" or not re.fullmatch(r"[A-Z]{2}", _country)
+                or _country not in CATALOG
+                or CATALOG[_country].get("relation") != "OFFICIAL_LIST"):
+            sys.exit("ERROR: unexpected published bank baseline name")
+        PUBLISHED_BANKS[_country] = load_published_catalog(_root, _country)
+    if not PUBLISHED_BANKS:
+        sys.exit("ERROR: empty published bank baseline directory")
 TODAY = date.today().isoformat()
 # The last material content change determines public page freshness.
 # Source observations can advance without any actual bank-data change.
@@ -480,11 +501,13 @@ def code_rows(lang, pre, codes, limit=None):
     return f'<div class="tbl"><table><thead>{head}</thead><tbody>{"".join(out)}</tbody></table></div>'
 
 
-def source_note(lang, pre):
+def source_note(lang, pre, code=None):
     d = CATALOG[pre]
     src = META.get("sources", {}).get(d["source"], {})
     es = lang == "es"
-    date_txt = fmt_date(d.get("effective_date", ""), lang)
+    effective = (date_for_code(d, PUBLISHED_BANKS.get(pre), code)
+                 if code is not None else d.get("effective_date", ""))
+    date_txt = fmt_date(effective, lang)
     return (f'<p class="hint">{"Fuente" if es else "Source"}: {E(src.get("institution") or d.get("attribution", ""))}'
             f'{(" · " + ("datos de" if es else "data as of") + " " + date_txt) if date_txt != "–" else ""}. {E(d.get("attribution", ""))}</p>')
 
@@ -562,7 +585,7 @@ def build_code_pages():
                            f"In {name} IBANs ({spec['length']} characters), the bank code occupies characters {bp[0] + 5} to {bp[1] + 4}.")))]
                 faq, fs = faq_html(qas, lang)
                 body = (f'<div class="hero"><h1>{E(ct)} {E(code)}: {E(bank)}</h1><p class="lead">{E(ds)}</p></div>'
-                        + f'<section class="panel">{facts}</section>' + source_note(lang, pre)
+                        + f'<section class="panel">{facts}</section>' + source_note(lang, pre, code)
                         + f'<h2>{"Identificar otro banco por IBAN" if es else "Identify another bank by IBAN"}</h2>' + tool("identify", lang, "IBAN", f"{pre}00 …") + privacy(lang)
                         + '<div class="prose">' + faq + f'<p><a href="{p_code_country(lang, pre)}">{"Todos los códigos de" if es else "All bank codes in"} {E(name)} →</a></p></div>')
                 sch = [fs, {"@context": "https://schema.org", "@type": "BankOrCreditUnion", "name": bank,
