@@ -322,3 +322,75 @@ def test_aceptacion_de_riesgo_solo_para_licencia_unknown(tmp_path):
     assert not sources._risk_accepted({**ok, "license": "RESTRICTED"})
     assert not sources._risk_accepted({**ok, "license": "EXCLUDED"})
     assert not sources._risk_accepted({**ok, "risk_accepted": {"by": "COO"}})   # sin fecha
+
+def test_source_date_observation_does_not_change_published_bank_content_date():
+    from sepa_tools.sync import _record_source_effective_dates
+
+    at = {"effective_date": "2026-11-03", "content_effective_date": "2026-11-03"}
+    _record_source_effective_dates(at, "2026-11-10", False)
+    assert at["effective_date"] == "2026-11-10"  # still auditable
+    assert at["content_effective_date"] == "2026-11-03"  # 874 unchanged codes
+    _record_source_effective_dates(at, "2026-11-11", False)
+    assert at["content_effective_date"] == "2026-11-03"
+    _record_source_effective_dates(at, "2026-11-12", True)
+    assert at["effective_date"] == "2026-11-12"
+    assert at["content_effective_date"] == "2026-11-12"
+
+    # Transition for sources that have not recorded a display date yet.
+    other = {"effective_date": "2026-11-09"}
+    _record_source_effective_dates(other, "2026-11-10", False)
+    assert other["effective_date"] == "2026-11-10"
+    assert other["content_effective_date"] == "2026-11-09"
+
+
+def test_date_only_source_observation_does_not_redate_sitemaps_or_bank_html(base, tmp_path):
+    """Full static builds remain stable when only a source observation date advances.
+
+    The source licence page may truthfully display a newer observation date.
+    Bank-code HTML and sitemap URL lists must not change unless actual bank data
+    or a site template changes. No network or hosting mutations are involved.
+    """
+    from pathlib import Path
+
+    root, _, _ = base
+
+    def render(destination):
+        env = dict(
+            os.environ,
+            SEPA_TOOLS_ROOT=str(root),
+            OUT_DIR=str(destination),
+            PUBLIC_BASE="https://cryptopocket.io",
+            CONTACT_URL="https://cryptopocket.io/contact",
+            NOINDEX="1",
+        )
+        job = subprocess.run(
+            [sys.executable, os.path.join(REPO, "site", "build_site.py")],
+            env=env, cwd=REPO, capture_output=True, text=True, timeout=120,
+        )
+        assert job.returncode == 0, job.stderr[-3000:]
+        tools = destination / "tools"
+        files = sorted(
+            list(tools.glob("sitemap*.xml"))
+            + list((tools / "en" / "bank-code-lookup").rglob("index.html"))
+            + list((tools / "es" / "codigo-banco").rglob("index.html"))
+        )
+        assert len([p for p in files if p.suffix == ".html"]) >= 2
+        assert len([p for p in files if p.suffix == ".xml"]) >= 2
+        payloads = {str(p.relative_to(tools)): p.read_bytes() for p in files}
+        assert all(b"<lastmod>" not in value for name, value in payloads.items()
+                   if name.endswith(".xml"))
+        assert any(b"xhtml:link" in value for name, value in payloads.items()
+                   if name.endswith("sitemap-1.xml"))
+        return payloads
+
+    first = render(tmp_path / "render-before")
+    path = Path(root) / "data/v2/meta.json"
+    meta = json.loads(path.read_text(encoding="utf-8"))
+    source = meta["sources"]["oenb_sepa_directory"]
+    previous = source.get("effective_date", "")
+    updated = "2026-11-11" if previous != "2026-11-11" else "2026-11-12"
+    source["effective_date"] = updated
+    path.write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
+    second = render(tmp_path / "render-after")
+    assert first.keys() == second.keys()
+    assert first == second, "Date-only source observation changed bank HTML or sitemap"
