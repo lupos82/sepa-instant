@@ -419,13 +419,16 @@ def test_published_bank_date_unchanged_detail_pages_are_byte_identical(base, tmp
     previous.mkdir()
     (previous / "AT.json").write_text(json.dumps(bank), encoding="utf-8")
 
-    def render(path, baseline=None):
+    def render(path, baseline=None, ledger=None):
         env = dict(os.environ, SEPA_TOOLS_ROOT=str(root),
                    OUT_DIR=str(path), PUBLIC_BASE="https://cryptopocket.io",
                    CONTACT_URL="https://cryptopocket.io/contact", NOINDEX="1")
         env.pop("SEPA_PUBLISHED_BANKS_DIR", None)
+        env.pop("SEPA_PUBLISHED_BANK_DATES_LEDGER", None)
         if baseline:
             env["SEPA_PUBLISHED_BANKS_DIR"] = str(baseline)
+        if ledger:
+            env["SEPA_PUBLISHED_BANK_DATES_LEDGER"] = str(ledger)
         result = subprocess.run([sys.executable, "site/build_site.py"],
                                 cwd=REPO, env=env, capture_output=True,
                                 text=True, timeout=120)
@@ -450,4 +453,33 @@ def test_published_bank_date_unchanged_detail_pages_are_byte_identical(base, tmp
         assert len(changed) == len(prior) == 1
         assert changed[0].read_bytes() != prior[0].read_bytes()
         assert b"TSTZATW1ABC" in changed[0].read_bytes()
-        assert b"TSTZATW1XXX" in new[0].read_bytes() or b"TST" in new[0].read_bytes()
+        assert b"TSTDATW1XXX" in new[0].read_bytes()
+
+    # Second release: all bank entries are unchanged but the official catalog
+    # observation advances again. The persisted sidecar must prevent the
+    # original 874-page date churn AND preserve the edited code's newer date.
+    ledger = after / "data/v2/bank-page-dates.json"
+    assert ledger.is_file(), "First differential release must write a date ledger"
+    previous_dates = json.loads(ledger.read_text(encoding="utf-8"))
+    assert previous_dates["schema"] == 1
+    assert previous_dates["dates"]["AT"][unchanged_code] == "2026-10-28"
+    assert previous_dates["dates"]["AT"][changed_code] == "2026-11-11"
+
+    next_baseline = tmp_path / "next-published"
+    next_baseline.mkdir()
+    (next_baseline / "AT.json").write_bytes(bank_path.read_bytes())
+    next_source = json.loads(bank_path.read_text(encoding="utf-8"))
+    next_source["effective_date"] = "2026-11-12"
+    bank_path.write_text(json.dumps(next_source), encoding="utf-8")
+    later = render(tmp_path / "third", next_baseline, ledger)
+
+    for lang in ("es", "en"):
+        for code in (unchanged_code, changed_code):
+            second = list((after / lang).rglob(code + "/index.html"))
+            third = list((later / lang).rglob(code + "/index.html"))
+            assert len(second) == len(third) == 1
+            assert second[0].read_bytes() == third[0].read_bytes(), (
+                lang + ": repeated catalog observation rewrote " + code)
+    latest_dates = json.loads(
+        (later / "data/v2/bank-page-dates.json").read_text(encoding="utf-8"))
+    assert latest_dates["dates"] == previous_dates["dates"]
