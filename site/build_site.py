@@ -19,7 +19,8 @@ import sys
 import unicodedata
 from pathlib import Path
 from datetime import date, datetime, timezone
-from bank_page_materiality import load_published_catalog, date_for_code
+from bank_page_materiality import (load_published_catalog, load_previous_dates,
+                                   date_for_code, LEDGER)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -79,6 +80,26 @@ if _baseline_root:
         PUBLISHED_BANKS[_country] = load_published_catalog(_root, _country)
     if not PUBLISHED_BANKS:
         sys.exit("ERROR: empty published bank baseline directory")
+
+# A separate, hash-verified published ledger carries earlier dates across
+# successive releases. First rollout may omit it; WEB verifies that absence
+# against the exact active FTPS manifest before executing this generator.
+_previous_ledger_path = os.environ.get("SEPA_PUBLISHED_BANK_DATES_LEDGER", "")
+if _previous_ledger_path and not PUBLISHED_BANKS:
+    sys.exit("ERROR: bank dates require verified published bank snapshots")
+PREVIOUS_DATES = {}
+if _previous_ledger_path:
+    _previous_path = Path(_previous_ledger_path)
+    if not _previous_path.is_absolute():
+        sys.exit("ERROR: published bank-date ledger path must be absolute")
+    PREVIOUS_DATES = load_previous_dates(_previous_path, _root, PUBLISHED_BANKS)
+PAGE_DATES = {
+    country: {
+        code: date_for_code(CATALOG[country], old, code,
+                            PREVIOUS_DATES.get(country))
+        for code in CATALOG[country]["codes"]
+    } for country, old in PUBLISHED_BANKS.items()
+}
 TODAY = date.today().isoformat()
 # The last material content change determines public page freshness.
 # Source observations can advance without any actual bank-data change.
@@ -505,7 +526,7 @@ def source_note(lang, pre, code=None):
     d = CATALOG[pre]
     src = META.get("sources", {}).get(d["source"], {})
     es = lang == "es"
-    effective = (date_for_code(d, PUBLISHED_BANKS.get(pre), code)
+    effective = (PAGE_DATES.get(pre, {}).get(code, d.get("effective_date", ""))
                  if code is not None else d.get("effective_date", ""))
     date_txt = fmt_date(effective, lang)
     return (f'<p class="hint">{"Fuente" if es else "Source"}: {E(src.get("institution") or d.get("attribution", ""))}'
@@ -871,6 +892,23 @@ def main():
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(tools_dir, "assets", "site.js"))
     shutil.copy(os.path.join(os.path.dirname(HERE), "web", "engine", "sepa-engine.js"), os.path.join(tools_dir, "assets", "sepa-engine.js"))
     shutil.copytree(DATA, os.path.join(tools_dir, "data", "v2"))
+    if PUBLISHED_BANKS:
+        destination = Path(tools_dir) / "data" / "v2" / LEDGER
+        if destination.exists():
+            sys.exit("ERROR: source data must not override published material-date ledger")
+        dates = {
+            "schema": 1,
+            "catalog_hashes": {
+                country: hashlib.sha256(
+                    (Path(DATA) / "banks" / (country + ".json")).read_bytes()
+                ).hexdigest()
+                for country in sorted(PUBLISHED_BANKS)
+            },
+            "dates": PAGE_DATES,
+        }
+        destination.write_text(
+            json.dumps(dates, sort_keys=True, ensure_ascii=False,
+                       separators=(",", ":")) + "\n", encoding="utf-8")
     for fn in (build_hub, build_identify, build_code_pages, build_iban_pages, build_bic, build_sepa, build_banks, build_guides, build_sources):
         fn()
     write_sitemap()
