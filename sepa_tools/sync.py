@@ -62,6 +62,22 @@ def _leis_to_resolve(snapshots):
     return leis
 
 
+def _record_source_effective_dates(st: dict, observed: str, content_changed: bool) -> None:
+    """Keep a fresh source as-of date without falsely changing published bank pages.
+
+    effective_date is the latest official source observation (for provenance).
+    content_effective_date is the date of the last actual row-level change,
+    used in code-directory pages to avoid thousands of cosmetic republishings.
+    """
+    previous = st.get("effective_date", "")
+    if content_changed:
+        st["content_effective_date"] = observed or previous
+    elif not st.get("content_effective_date"):
+        st["content_effective_date"] = previous or observed
+    if observed:
+        st["effective_date"] = observed
+
+
 def run(offline=False, only=None, fixtures=None, on=None) -> dict:
     on = on or today()
     fixtures = fixtures or {}
@@ -98,6 +114,9 @@ def run(offline=False, only=None, fixtures=None, on=None) -> dict:
             entry["status"] = "unchanged"
             if res.version:
                 st["version"] = res.version
+            # A 304/not-modified response does not change an effective date.
+            if not st.get("content_effective_date") and st.get("effective_date"):
+                st["content_effective_date"] = st["effective_date"]
             if prev is not None:
                 snapshots[sid] = prev
             elif res.records:
@@ -119,8 +138,7 @@ def run(offline=False, only=None, fixtures=None, on=None) -> dict:
                 st.update(status="updated" if content_changed else "unchanged", error="", last_success=now_utc(),
                           sha256=res.sha256, etag=res.etag, last_modified=res.last_modified,
                           records=len(res.records), version=res.version or st.get("version", ""))
-                if res.effective_date:
-                    st["effective_date"] = res.effective_date
+                _record_source_effective_dates(st, res.effective_date, bool(content_changed))
                 if content_changed:
                     st["last_change"] = on
                 entry.update(status=st["status"], diff={k: d[k] for k in ("added", "removed", "modified")})
