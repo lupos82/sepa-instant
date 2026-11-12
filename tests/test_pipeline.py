@@ -322,3 +322,164 @@ def test_aceptacion_de_riesgo_solo_para_licencia_unknown(tmp_path):
     assert not sources._risk_accepted({**ok, "license": "RESTRICTED"})
     assert not sources._risk_accepted({**ok, "license": "EXCLUDED"})
     assert not sources._risk_accepted({**ok, "risk_accepted": {"by": "COO"}})   # sin fecha
+
+def test_source_date_observation_does_not_change_published_bank_content_date():
+    from sepa_tools.sync import _record_source_effective_dates
+
+    at = {"effective_date": "2026-11-03", "content_effective_date": "2026-11-03"}
+    _record_source_effective_dates(at, "2026-11-10", False)
+    assert at["effective_date"] == "2026-11-10"  # still auditable
+    assert at["content_effective_date"] == "2026-11-03"  # 874 unchanged codes
+    _record_source_effective_dates(at, "2026-11-11", False)
+    assert at["content_effective_date"] == "2026-11-03"
+    _record_source_effective_dates(at, "2026-11-12", True)
+    assert at["effective_date"] == "2026-11-12"
+    assert at["content_effective_date"] == "2026-11-12"
+
+    # Transition for sources that have not recorded a display date yet.
+    other = {"effective_date": "2026-11-09"}
+    _record_source_effective_dates(other, "2026-11-10", False)
+    assert other["effective_date"] == "2026-11-10"
+    assert other["content_effective_date"] == "2026-11-09"
+
+
+def test_date_only_source_observation_does_not_redate_sitemaps_or_bank_html(base, tmp_path):
+    """Full static builds remain stable when only a source observation date advances.
+
+    The source licence page may truthfully display a newer observation date.
+    Bank-code HTML and sitemap URL lists must not change unless actual bank data
+    or a site template changes. No network or hosting mutations are involved.
+    """
+    from pathlib import Path
+
+    root, _, _ = base
+
+    def render(destination):
+        env = dict(
+            os.environ,
+            SEPA_TOOLS_ROOT=str(root),
+            OUT_DIR=str(destination),
+            PUBLIC_BASE="https://cryptopocket.io",
+            CONTACT_URL="https://cryptopocket.io/contact",
+            NOINDEX="1",
+        )
+        job = subprocess.run(
+            [sys.executable, os.path.join(REPO, "site", "build_site.py")],
+            env=env, cwd=REPO, capture_output=True, text=True, timeout=120,
+        )
+        assert job.returncode == 0, job.stderr[-3000:]
+        tools = destination / "tools"
+        files = sorted(
+            list(tools.glob("sitemap*.xml"))
+            + list((tools / "en" / "bank-code-lookup").rglob("index.html"))
+            + list((tools / "es" / "codigo-banco").rglob("index.html"))
+        )
+        assert len([p for p in files if p.suffix == ".html"]) >= 2
+        assert len([p for p in files if p.suffix == ".xml"]) >= 2
+        payloads = {str(p.relative_to(tools)): p.read_bytes() for p in files}
+        assert all(b"<lastmod>" not in value for name, value in payloads.items()
+                   if name.endswith(".xml"))
+        assert any(b"xhtml:link" in value for name, value in payloads.items()
+                   if name.endswith("sitemap-1.xml"))
+        return payloads
+
+    first = render(tmp_path / "render-before")
+    path = Path(root) / "data/v2/meta.json"
+    meta = json.loads(path.read_text(encoding="utf-8"))
+    source = meta["sources"]["oenb_sepa_directory"]
+    previous = source.get("effective_date", "")
+    updated = "2026-11-11" if previous != "2026-11-11" else "2026-11-12"
+    source["effective_date"] = updated
+    path.write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
+    second = render(tmp_path / "render-after")
+    assert first.keys() == second.keys()
+    assert first == second, "Date-only source observation changed bank HTML or sitemap"
+
+
+def test_published_bank_date_unchanged_detail_pages_are_byte_identical(base, tmp_path):
+    """Full generator: a one-code BIC update must not redate every AT code page.
+
+    Baseline is deliberately synthesized; NO public site or FTPS is contacted.
+    The separate WEB audit authenticates actual baseline bytes against FTPS.
+    """
+    root, _, _ = base
+    from pathlib import Path
+    bank_path = Path(root) / "data/v2/banks/AT.json"
+    bank = json.loads(bank_path.read_text(encoding="utf-8"))
+    # Ensure the fixture contains both an edited and an untouched bank record.
+    unchanged_code = "99901"
+    changed_code = "99902"
+    assert unchanged_code in bank["codes"]
+    bank["codes"][changed_code] = {**bank["codes"][unchanged_code],
+                                  "n": "Synthetic second Austrian bank",
+                                  "b": ["TSTZATW1XXX"]}
+    bank["effective_date"] = "2026-10-28"
+    bank_path.write_text(json.dumps(bank), encoding="utf-8")
+    previous = tmp_path / "last-published"
+    previous.mkdir()
+    (previous / "AT.json").write_text(json.dumps(bank), encoding="utf-8")
+
+    def render(path, baseline=None, ledger=None):
+        env = dict(os.environ, SEPA_TOOLS_ROOT=str(root),
+                   OUT_DIR=str(path), PUBLIC_BASE="https://cryptopocket.io",
+                   CONTACT_URL="https://cryptopocket.io/contact", NOINDEX="1")
+        env.pop("SEPA_PUBLISHED_BANKS_DIR", None)
+        env.pop("SEPA_PUBLISHED_BANK_DATES_LEDGER", None)
+        if baseline:
+            env["SEPA_PUBLISHED_BANKS_DIR"] = str(baseline)
+        if ledger:
+            env["SEPA_PUBLISHED_BANK_DATES_LEDGER"] = str(ledger)
+        result = subprocess.run([sys.executable, "site/build_site.py"],
+                                cwd=REPO, env=env, capture_output=True,
+                                text=True, timeout=120)
+        assert result.returncode == 0, result.stderr[-3000:]
+        return path / "tools"
+
+    before = render(tmp_path / "before")
+    current = json.loads(bank_path.read_text(encoding="utf-8"))
+    current["effective_date"] = "2026-11-11"
+    current["codes"][changed_code]["b"] = ["TSTZATW1ABC"]
+    bank_path.write_text(json.dumps(current), encoding="utf-8")
+    after = render(tmp_path / "after", previous)
+
+    for lang in ("es", "en"):
+        old = list((before / lang).rglob(unchanged_code + "/index.html"))
+        new = list((after / lang).rglob(unchanged_code + "/index.html"))
+        assert len(old) == len(new) == 1
+        assert old[0].read_bytes() == new[0].read_bytes(), (
+            lang + ": directory date alone rewrote an unchanged bank-code page")
+        changed = list((after / lang).rglob(changed_code + "/index.html"))
+        prior = list((before / lang).rglob(changed_code + "/index.html"))
+        assert len(changed) == len(prior) == 1
+        assert changed[0].read_bytes() != prior[0].read_bytes()
+        assert b"TSTZATW1ABC" in changed[0].read_bytes()
+        assert b"TSTDATW1XXX" in new[0].read_bytes()
+
+    # Second release: all bank entries are unchanged but the official catalog
+    # observation advances again. The persisted sidecar must prevent the
+    # original 874-page date churn AND preserve the edited code's newer date.
+    ledger = after / "data/v2/bank-page-dates.json"
+    assert ledger.is_file(), "First differential release must write a date ledger"
+    previous_dates = json.loads(ledger.read_text(encoding="utf-8"))
+    assert previous_dates["schema"] == 1
+    assert previous_dates["dates"]["AT"][unchanged_code] == "2026-10-28"
+    assert previous_dates["dates"]["AT"][changed_code] == "2026-11-11"
+
+    next_baseline = tmp_path / "next-published"
+    next_baseline.mkdir()
+    (next_baseline / "AT.json").write_bytes(bank_path.read_bytes())
+    next_source = json.loads(bank_path.read_text(encoding="utf-8"))
+    next_source["effective_date"] = "2026-11-12"
+    bank_path.write_text(json.dumps(next_source), encoding="utf-8")
+    later = render(tmp_path / "third", next_baseline, ledger)
+
+    for lang in ("es", "en"):
+        for code in (unchanged_code, changed_code):
+            second = list((after / lang).rglob(code + "/index.html"))
+            third = list((later / lang).rglob(code + "/index.html"))
+            assert len(second) == len(third) == 1
+            assert second[0].read_bytes() == third[0].read_bytes(), (
+                lang + ": repeated catalog observation rewrote " + code)
+    latest_dates = json.loads(
+        (later / "data/v2/bank-page-dates.json").read_text(encoding="utf-8"))
+    assert latest_dates["dates"] == previous_dates["dates"]
