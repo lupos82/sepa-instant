@@ -26,12 +26,12 @@
   "version": ""
  },
  "ecb_mfi": {
-  "effective_date": "2026-11-10",
+  "effective_date": "2026-11-11",
   "etag": "",
-  "last_change": "2026-11-11",
-  "last_modified": "Tue, 10 Nov 2026 16:06:27 GMT",
-  "records": 4633,
-  "sha256": "bca9b3abfa7a40571ac31c57edf06e7afda504abf1c196462a2f6b73b66e3e63",
+  "last_change": "2026-11-12",
+  "last_modified": "Wed, 11 Nov 2026 16:06:06 GMT",
+  "records": 4632,
+  "sha256": "7beafdd9dcba8f55f6c5bce68b3ed0e9131fdaa1e3ac5c3fb66e4e3f16c23ce5",
   "version": ""
  },
  "epc_sct": {
@@ -85,12 +85,12 @@
   "records": 3351
  },
  "oenb_sepa_directory": {
-  "effective_date": "2026-11-11",
+  "effective_date": "2026-11-12",
   "etag": "",
-  "last_change": "2026-11-11",
+  "last_change": "2026-11-12",
   "last_modified": "",
-  "records": 874,
-  "sha256": "6ad5927bf44477bddf230187688be49d5e1c4358c3273696afde8fabfa674b5f",
+  "records": 875,
+  "sha256": "2b1c2a5a291ded0257f737668be4d45251458e371db87936a7cb6434905762a1",
   "version": ""
  },
  "schwifty_at": {
