@@ -26,12 +26,12 @@
   "version": ""
  },
  "ecb_mfi": {
-  "effective_date": "2026-11-12",
+  "effective_date": "2026-11-13",
   "etag": "",
-  "last_change": "2026-11-12",
-  "last_modified": "Thu, 12 Nov 2026 16:06:21 GMT",
-  "records": 4632,
-  "sha256": "d7ab4d006f4fb34bd07d5e77516b3a444d032c77029ba633408e042c7ae235c5",
+  "last_change": "2026-11-14",
+  "last_modified": "Fri, 13 Nov 2026 16:06:26 GMT",
+  "records": 4630,
+  "sha256": "ff14fab7018c252ce23a074df89cf7ec27771adff41b32944372f07cf965cd78",
   "version": ""
  },
  "epc_sct": {
@@ -53,12 +53,12 @@
   "version": ""
  },
  "epc_sdd_b2b": {
-  "effective_date": "2026-10-09",
+  "effective_date": "2026-11-13",
   "etag": "",
-  "last_change": "2026-10-29",
-  "last_modified": "Fri, 09 Oct 2026 07:30:54 GMT",
-  "records": 2288,
-  "sha256": "d9f25836439b9271505ed7663363b6f4b6477a442a8036a70b814d1870e1ce4b",
+  "last_change": "2026-11-14",
+  "last_modified": "Fri, 13 Nov 2026 19:30:33 GMT",
+  "records": 2286,
+  "sha256": "f10e966a9b7a13db3e1b5e9878ba8da8ad165a006ae54afa951973bae092f962",
   "version": ""
  },
  "epc_sdd_core": {
