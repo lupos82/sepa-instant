@@ -15,7 +15,7 @@ for lang in ("es", "en"):
     text = labels[lang]["cta_p"]
     assert text and "Cryptopocket" in text
     assert len(text) < 450, f"Unbounded marketing claim: {lang}"
-    assert not re.search(r"(?i)(?:iban\\s+virtual|virtual\\s+ibans?|iban\\s+accounts|cuentas?\\s+virtual)", text), (
+    assert not re.search(r"(?i)(?:iban\s+virtual|virtual\s+ibans?|iban\s+accounts|cuentas?\s+virtual)", text), (
         f"Unapproved account/IBAN offer in {lang} CTA"
     )
     assert "on/off-ramp" in text, f"Missing verified B2B exchange positioning: {lang}"
