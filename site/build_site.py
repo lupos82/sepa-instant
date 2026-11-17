@@ -17,7 +17,10 @@ import re
 import shutil
 import sys
 import unicodedata
+from pathlib import Path
 from datetime import date, datetime, timezone
+from bank_page_materiality import (load_published_catalog, load_previous_dates,
+                                   date_for_code, LEDGER)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -58,9 +61,49 @@ STATUS = jload("status.json", {}) or {}
 CATALOG = {}
 for f in sorted(os.listdir(os.path.join(DATA, "banks"))) if os.path.isdir(os.path.join(DATA, "banks")) else []:
     CATALOG[f[:-5]] = jload(f"banks/{f}")
+
+# When reviewing an incremental release, retain actual published dates on
+# unchanged bank-code details. Their bank DATA always comes from the current
+# official source. The audit separately verifies baseline hashes against FTPS.
+PUBLISHED_BANKS = {}
+_baseline_root = os.environ.get("SEPA_PUBLISHED_BANKS_DIR", "")
+if _baseline_root:
+    _root = Path(_baseline_root)
+    if not _root.is_absolute() or _root.is_symlink() or not _root.is_dir():
+        sys.exit("ERROR: SEPA_PUBLISHED_BANKS_DIR must be an absolute directory")
+    for _item in _root.iterdir():
+        _country = _item.stem
+        if (_item.suffix != ".json" or not re.fullmatch(r"[A-Z]{2}", _country)
+                or _country not in CATALOG
+                or CATALOG[_country].get("relation") != "OFFICIAL_LIST"):
+            sys.exit("ERROR: unexpected published bank baseline name")
+        PUBLISHED_BANKS[_country] = load_published_catalog(_root, _country)
+    if not PUBLISHED_BANKS:
+        sys.exit("ERROR: empty published bank baseline directory")
+
+# A separate, hash-verified published ledger carries earlier dates across
+# successive releases. First rollout may omit it; WEB verifies that absence
+# against the exact active FTPS manifest before executing this generator.
+_previous_ledger_path = os.environ.get("SEPA_PUBLISHED_BANK_DATES_LEDGER", "")
+if _previous_ledger_path and not PUBLISHED_BANKS:
+    sys.exit("ERROR: bank dates require verified published bank snapshots")
+PREVIOUS_DATES = {}
+if _previous_ledger_path:
+    _previous_path = Path(_previous_ledger_path)
+    if not _previous_path.is_absolute():
+        sys.exit("ERROR: published bank-date ledger path must be absolute")
+    PREVIOUS_DATES = load_previous_dates(_previous_path, _root, PUBLISHED_BANKS)
+PAGE_DATES = {
+    country: {
+        code: date_for_code(CATALOG[country], old, code,
+                            PREVIOUS_DATES.get(country))
+        for code in CATALOG[country]["codes"]
+    } for country, old in PUBLISHED_BANKS.items()
+}
 TODAY = date.today().isoformat()
-# Fecha del último cambio real de datos (no la hora de comprobación, que cambia cada día).
-_DATES = [(v.get(k) or "")[:10] for v in (META.get("sources") or {}).values() for k in ("last_change", "effective_date")]
+# The last material content change determines public page freshness.
+# Source observations can advance without any actual bank-data change.
+_DATES = [(v.get("last_change") or "")[:10] for v in (META.get("sources") or {}).values()]
 UPDATED = max([d for d in _DATES if re.match(r"\d{4}-\d{2}-\d{2}$", d)] or [TODAY])
 # NOINDEX=1: copia de previsualización (p. ej. sepa.cryptopocket.io/tools) que no debe competir con la web corporativa.
 ROBOTS = '<meta name="robots" content="noindex,follow">' if os.environ.get("NOINDEX") == "1" else ""
@@ -479,11 +522,13 @@ def code_rows(lang, pre, codes, limit=None):
     return f'<div class="tbl"><table><thead>{head}</thead><tbody>{"".join(out)}</tbody></table></div>'
 
 
-def source_note(lang, pre):
+def source_note(lang, pre, code=None):
     d = CATALOG[pre]
     src = META.get("sources", {}).get(d["source"], {})
     es = lang == "es"
-    date_txt = fmt_date(d.get("effective_date", ""), lang)
+    effective = (PAGE_DATES.get(pre, {}).get(code, d.get("effective_date", ""))
+                 if code is not None else d.get("effective_date", ""))
+    date_txt = fmt_date(effective, lang)
     return (f'<p class="hint">{"Fuente" if es else "Source"}: {E(src.get("institution") or d.get("attribution", ""))}'
             f'{(" · " + ("datos de" if es else "data as of") + " " + date_txt) if date_txt != "–" else ""}. {E(d.get("attribution", ""))}</p>')
 
@@ -561,7 +606,7 @@ def build_code_pages():
                            f"In {name} IBANs ({spec['length']} characters), the bank code occupies characters {bp[0] + 5} to {bp[1] + 4}.")))]
                 faq, fs = faq_html(qas, lang)
                 body = (f'<div class="hero"><h1>{E(ct)} {E(code)}: {E(bank)}</h1><p class="lead">{E(ds)}</p></div>'
-                        + f'<section class="panel">{facts}</section>' + source_note(lang, pre)
+                        + f'<section class="panel">{facts}</section>' + source_note(lang, pre, code)
                         + f'<h2>{"Identificar otro banco por IBAN" if es else "Identify another bank by IBAN"}</h2>' + tool("identify", lang, "IBAN", f"{pre}00 …") + privacy(lang)
                         + '<div class="prose">' + faq + f'<p><a href="{p_code_country(lang, pre)}">{"Todos los códigos de" if es else "All bank codes in"} {E(name)} →</a></p></div>')
                 sch = [fs, {"@context": "https://schema.org", "@type": "BankOrCreditUnion", "name": bank,
@@ -819,12 +864,12 @@ SITEMAP_CHUNK = 10000  # límite del protocolo: 50.000 URL / 50 MB por fichero
 
 
 def write_sitemap():
-    """/tools/sitemap.xml es un índice de sitemaps (sitemap-1.xml, sitemap-2.xml…), apto para crecer."""
+    """Generate localized URL sitemaps without invented per-page lastmod values."""
     names = []
     for i in range(0, len(SITEMAP), SITEMAP_CHUNK):
         lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
         for path, alts in SITEMAP[i:i + SITEMAP_CHUNK]:
-            lines.append(f"<url><loc>{PUBLIC_BASE}{E(path)}</loc><lastmod>{UPDATED}</lastmod>"
+            lines.append(f"<url><loc>{PUBLIC_BASE}{E(path)}</loc>"
                          + "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{PUBLIC_BASE}{E(p)}"/>' for l, p in alts.items()) + "</url>")
         lines.append("</urlset>")
         name = f"sitemap-{i // SITEMAP_CHUNK + 1}.xml"
@@ -832,7 +877,7 @@ def write_sitemap():
         with open(os.path.join(OUT, "tools", name), "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
     idx = ['<?xml version="1.0" encoding="UTF-8"?>', '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    idx += [f"<sitemap><loc>{PUBLIC_BASE}{PREFIX}/{n}</loc><lastmod>{UPDATED}</lastmod></sitemap>" for n in names]
+    idx += [f"<sitemap><loc>{PUBLIC_BASE}{PREFIX}/{n}</loc></sitemap>" for n in names]
     idx.append("</sitemapindex>")
     with open(os.path.join(OUT, "tools", "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write("\n".join(idx))
@@ -847,6 +892,23 @@ def main():
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(tools_dir, "assets", "site.js"))
     shutil.copy(os.path.join(os.path.dirname(HERE), "web", "engine", "sepa-engine.js"), os.path.join(tools_dir, "assets", "sepa-engine.js"))
     shutil.copytree(DATA, os.path.join(tools_dir, "data", "v2"))
+    if PUBLISHED_BANKS:
+        destination = Path(tools_dir) / "data" / "v2" / LEDGER
+        if destination.exists():
+            sys.exit("ERROR: source data must not override published material-date ledger")
+        dates = {
+            "schema": 1,
+            "catalog_hashes": {
+                country: hashlib.sha256(
+                    (Path(DATA) / "banks" / (country + ".json")).read_bytes()
+                ).hexdigest()
+                for country in sorted(PUBLISHED_BANKS)
+            },
+            "dates": PAGE_DATES,
+        }
+        destination.write_text(
+            json.dumps(dates, sort_keys=True, ensure_ascii=False,
+                       separators=(",", ":")) + "\n", encoding="utf-8")
     for fn in (build_hub, build_identify, build_code_pages, build_iban_pages, build_bic, build_sepa, build_banks, build_guides, build_sources):
         fn()
     write_sitemap()
