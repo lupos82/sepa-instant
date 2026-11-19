@@ -26,30 +26,30 @@
   "version": ""
  },
  "ecb_mfi": {
-  "effective_date": "2026-11-17",
+  "effective_date": "2026-11-18",
   "etag": "",
-  "last_change": "2026-11-17",
-  "last_modified": "Tue, 17 Nov 2026 16:06:12 GMT",
+  "last_change": "2026-11-19",
+  "last_modified": "Wed, 18 Nov 2026 16:06:30 GMT",
   "records": 4631,
-  "sha256": "16909a1572f29028dcc80a343888004b373400c4187564b1b09d5e5f87f59e44",
+  "sha256": "3ebb1fbe1eb66ca72b4574c0c6c6c65a0ac2c1479d073e0b45b796d99ff7bef7",
   "version": ""
  },
  "epc_sct": {
-  "effective_date": "2026-10-09",
+  "effective_date": "2026-11-13",
   "etag": "",
-  "last_change": "2026-10-29",
-  "last_modified": "Fri, 09 Oct 2026 07:34:07 GMT",
-  "records": 3501,
-  "sha256": "00ab000a6941a6d3ecf13ecaa0c46c10650c4f5b766f49108aa5059652d86b34",
+  "last_change": "2026-11-19",
+  "last_modified": "Fri, 13 Nov 2026 22:31:25 GMT",
+  "records": 3503,
+  "sha256": "acbcfd06158ae4205fb593a17def9faf3d46d4ca641473ce0cb4b4309f40bbb8",
   "version": ""
  },
  "epc_sct_inst": {
-  "effective_date": "2026-10-09",
+  "effective_date": "2026-11-13",
   "etag": "",
-  "last_change": "2026-10-29",
-  "last_modified": "Fri, 09 Oct 2026 07:30:48 GMT",
-  "records": 2843,
-  "sha256": "497fc198cb7f6c843d1244cf23dbc42d2b6a909dd19083996eae53a918e487f3",
+  "last_change": "2026-11-19",
+  "last_modified": "Fri, 13 Nov 2026 22:30:03 GMT",
+  "records": 2889,
+  "sha256": "aaab795524d859d85352e02d85a6d3632b8965ab2d34559de0179a2fd1983373",
   "version": ""
  },
  "epc_sdd_b2b": {
@@ -85,12 +85,12 @@
   "records": 3351
  },
  "oenb_sepa_directory": {
-  "effective_date": "2026-11-18",
+  "effective_date": "2026-11-19",
   "etag": "",
   "last_change": "2026-11-12",
   "last_modified": "",
   "records": 875,
-  "sha256": "102c7c75307e7ff0737940a7d601da26f39dc05fc9274b969a06bba0b42abcea",
+  "sha256": "5a969e7b72250c2252e44ad838932fb6df0258fbdad68cbf26ba9511bc9d776a",
   "version": ""
  },
  "schwifty_at": {

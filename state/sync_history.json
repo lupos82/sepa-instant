@@ -1,5 +1,36 @@
 [
  {
+  "data_version": "8d72cb77b85ce417",
+  "date": "2026-11-19",
+  "errors": [],
+  "sources": {
+   "ecb_mfi": {
+    "diff": {
+     "added": 0,
+     "modified": 1,
+     "removed": 0
+    },
+    "status": "updated"
+   },
+   "epc_sct": {
+    "diff": {
+     "added": 19,
+     "modified": 3,
+     "removed": 17
+    },
+    "status": "updated"
+   },
+   "epc_sct_inst": {
+    "diff": {
+     "added": 50,
+     "modified": 2,
+     "removed": 4
+    },
+    "status": "updated"
+   }
+  }
+ },
+ {
   "data_version": "85eecbbf0e4ed55d",
   "date": "2026-11-17",
   "errors": [],
